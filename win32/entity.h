@@ -5,21 +5,34 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "sprite.h"
+#include "vector.h"
 
+/**
+	*@brief a simple entity structure
+	*/
 
 typedef struct Entity_S
 {
 	int inuse;
-	Entity_t *EList;
 	Sprite_T *sprite;
 	int frame;
-	int x, y;
-	int health, healthMax;
-	int velX, velY;
+	Vector2d position;
+	Vector2d velocity;
+	float health, healthMax;
 	int state;
 
 	void (*think)(struct Entity_S *self);
 
 }Entity_t
+
+/* 
+
+initialwholesystem
+draw call draw sprite
+new
+delete
+update
+
+*/
 
 #endif

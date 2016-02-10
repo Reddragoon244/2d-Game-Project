@@ -9,17 +9,23 @@ typedef struct Sprite_T
 {
 	int refcount;
 	char filename[128];
-	SDL_Surface *image;
+	SDL_Texture *image;
 	int imageW, imageH;
 	int frameW, frameH;
 	int fpl;
 
 }Sprite;
 
+
+/**
+  * @brief
+  * @param 
+  */
+
 void initSpriteSystem();/*clear and initial sprites*/
 void closeSpriteSystem();/*call this before you exit to make sure all the memory that your program used is given back to your OS*/
 
-Sprite *sprite_load(char *filename,int sizex, int sizey);/*simplest file to load*/
+Sprite *sprite_load(char *filename,int sizex, int sizey);/*simplestway to load a file*/
 void sprite_free(Sprite *sprite);
 void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int drawY);
 

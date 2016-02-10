@@ -17,6 +17,10 @@ Sprite SpriteList[spriteMax];/*list of sprites*/
 Sprite *Msprite;
 int NumSprites;
 
+/**
+	*@brief Initialization of the sprite system
+	*/
+
 void initSpriteSystem()
 {
 	spriteList = (Sprite *)malloc(sizeof(Sprite)*spriteMax);
@@ -27,7 +31,8 @@ void initSpriteSystem()
 Sprite *sprite_load(char *filename,int sizex, int sizey)
 {
 	int i;
-  SDL_Surface *temp;
+  SDL_Texture *temp;
+  SDL_Renderer *renderer;
   /*first search to see if the requested sprite image is alreday loaded*/
   for(i = 0; i < NumSprites; i++)
   {
@@ -50,7 +55,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey)
   {
     if(!SpriteList[i].refcount)break;
   }
-  temp = IMG_Load(filename);
+  temp = IMG_LoadTexture(renderer, filename);/* renderer needs to be something*/
 
   if(temp == NULL)
   {
@@ -60,10 +65,10 @@ Sprite *sprite_load(char *filename,int sizex, int sizey)
 
   SpriteList[i].image = temp;
 
-  SpriteList[i].fpl = 16;
-  SpriteList[i].imageW = sizex;
-  SpriteList[i].imageH = sizey;
-  SpriteList[i].refcount++;
+  SpriteList[i].fpl = 16;/* Make every spritesheet 16 frames per line or this needs to change*/
+  SpriteList[i].imageW = sizex;/* Texture Size of the frames so a 4x3 sprite sheet this would be 4*/
+  SpriteList[i].imageH = sizey;/* Texture Size of the frames so a 4x3 sprite sheet this would be 3*/
+  SpriteList[i].refcount++;/* refcount is used to keep a count of the number of times this sprite is used*/
 
   return &SpriteList[i];
 
@@ -77,7 +82,7 @@ void sprite_free(Sprite *sprite)
   {
 		strcpy(sprite->filename,"\0");
 		
-		if(sprite->image != NULL)SDL_FreeSurface(sprite->image);
+		if(sprite->image != NULL)SDL_DestroyTexture(sprite->image);
 			sprite->image = NULL;
   }
  /*and then lets make sure we don't leave any potential seg faults 
@@ -106,6 +111,6 @@ void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int
     dest.y = drawY;
     dest.w = sprite->imageW;
     dest.h = sprite->imageH;
-    SDL_BlitSurface(sprite->image, &src, surface, &dest); /*find something to surface copy to a destination surface*/
-  
+    /* Need a SDL function to BlitSurface but then turn it into a texture*/
+
 }
