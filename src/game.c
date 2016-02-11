@@ -41,16 +41,17 @@ int main(int argc, char *argv[])
 
 		window = SDL_CreateWindow("Into the Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_SHOWN);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
-		texture = LoadTexture("image.bmp", renderer);/*change this so LoadTexture is a pointer to a SDL_Texture*/
+		//texture = LoadTexture("image.bmp", renderer);/*change this so LoadTexture is a pointer to a SDL_Texture*/
 
 		initSpriteSystem();
-		sprite_load("image.bmp", 13, 21);
+		sprite_load("image.bmp", 13, 21, renderer);
 
-		SDL_QueryTexture(texture, NULL, NULL, &textureW, &textureH);
+		//sprite_draw(SpriteList[i],  
+
 		frameW = textureW / 13;
 		frameH = textureH / 21;
 
-		playerRect.x = playerRect.y = 0;
+		playerRect.x = playerRect.y = 0;//the sprites Rectangle
 		playerRect.w = frameW;
 		playerRect.h = frameH;
 
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
 	SDL_DestroyWindow(window);
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
+	closeSpriteSystem();
 	window = NULL;
 	texture = NULL;
 	renderer = NULL;

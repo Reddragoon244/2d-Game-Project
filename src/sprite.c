@@ -28,11 +28,11 @@ void initSpriteSystem()
 	atexit(closeSpriteSystem);
 }
 
-Sprite *sprite_load(char *filename,int sizex, int sizey)
+Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
 {
 	int i;
   SDL_Texture *temp;
-  SDL_Renderer *renderer;
+
   /*first search to see if the requested sprite image is alreday loaded*/
   for(i = 0; i < NumSprites; i++)
   {
@@ -47,7 +47,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey)
   if(NumSprites + 1 >= spriteMax)
   {
         fprintf(stderr, "Maximum Sprites Reached.\n");
-        exit(1);
+        
   }
   /*if its not already in memory, then load it.*/
   NumSprites++;
@@ -60,7 +60,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey)
   if(temp == NULL)
   {
     fprintf(stderr,"unable to load a vital sprite: %s\n",SDL_GetError());
-    exit(0);
+    
   }
 
   SpriteList[i].image = temp;
@@ -102,7 +102,7 @@ void closeSpriteSystem()
 
 void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int drawY)
 {
-    SDL_Rect src,dest;
+	SDL_Rect src,dest;
     src.x = frame%sprite->fpl * sprite->imageW;
     src.y = frame/sprite->fpl * sprite->imageH;
     src.w = sprite->imageW;
@@ -111,6 +111,7 @@ void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int
     dest.y = drawY;
     dest.w = sprite->imageW;
     dest.h = sprite->imageH;
-    /* Need a SDL function to BlitSurface but then turn it into a texture*/
+	SDL_QueryTexture(sprite->image, NULL, NULL, &src.w, &src.h);
+	/* Need a SDL function texture to renderer*/
 
 }
