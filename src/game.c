@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 	SDL_Window *window = NULL;//always make a poiter null at initial
 	SDL_Surface *temp = NULL;
 	SDL_Rect playerRect, playerPos;
+	Sprite *spritelist[spriteMax];
 	playerPos.x = playerPos.y = 0;//position of image
 	playerPos.w = playerPos.h = 64;//size of the image on screen
 	int textureW, textureH;
@@ -44,16 +45,19 @@ int main(int argc, char *argv[])
 		//texture = LoadTexture("image.bmp", renderer);/*change this so LoadTexture is a pointer to a SDL_Texture*/
 
 		initSpriteSystem();
-		sprite_load("image.bmp", 13, 21, renderer);
 
-		//sprite_draw(SpriteList[i],  
+		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);
 
-		frameW = textureW / 13;
-		frameH = textureH / 21;
+		if(spritelist[0] == NULL)
+			printf("problem %s", SDL_GetError());
+		else
+			sprite_draw(spritelist[0], 273, temp, NULL, NULL);   
 
-		playerRect.x = playerRect.y = 0;//the sprites Rectangle
-		playerRect.w = frameW;
-		playerRect.h = frameH;
+		SDL_QueryTexture(spritelist[0]->image, NULL, NULL, &spritelist[0]->imageW, &spritelist[0]->imageH);/*    */
+
+		playerRect.x = playerRect.y = 0;//the sprite's Rectangle
+		playerRect.w = spritelist[0]->frameW;
+		playerRect.h = spritelist[0]->frameH;
 
 			while(isRunning)
 			{
@@ -68,13 +72,13 @@ int main(int argc, char *argv[])
 				if(frameTime == 1000)
 				{
 					frameTime = 0;
-					playerRect.x += frameW;
-					if(playerRect.x >= textureW)
+					playerRect.x += spritelist[0]->frameW;
+					if(playerRect.x >= spritelist[0]->imageW)
 						playerRect.x = 0;
 				}
 
 				SDL_RenderClear(renderer);
-				SDL_RenderCopy(renderer, texture, &playerRect, &playerPos);
+				SDL_RenderCopy(renderer, spritelist[0]->image, &playerRect, &playerPos);
 				SDL_RenderPresent(renderer);
 			}
 		

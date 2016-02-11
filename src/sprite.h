@@ -5,6 +5,8 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
+static const int spriteMax = 1000;
+
 typedef struct Sprite_T
 {
 	int refcount;

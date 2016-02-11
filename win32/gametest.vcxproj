@@ -48,11 +48,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ReferencePath>C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(ReferencePath)</ReferencePath>
-    <LibraryPath>C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(LibraryPath)</LibraryPath>
+    <ReferencePath>C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(ReferencePath)</ReferencePath>
+    <LibraryPath>C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(LibraryPath)</LibraryPath>
     <OutDir>./</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

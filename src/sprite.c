@@ -7,7 +7,7 @@
 
 
 Sprite *spriteList = NULL;
-const int spriteMax = 1000;
+
 
 SDL_Window *window; /*pointer to the window handler */
 SDL_Surface *buffer; /*pointer to the background image buffer*/
@@ -103,6 +103,7 @@ void closeSpriteSystem()
 void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int drawY)
 {
 	SDL_Rect src,dest;
+
     src.x = frame%sprite->fpl * sprite->imageW;
     src.y = frame/sprite->fpl * sprite->imageH;
     src.w = sprite->imageW;
@@ -111,7 +112,6 @@ void sprite_draw(Sprite *sprite, int frame, SDL_Surface *surface, int drawX, int
     dest.y = drawY;
     dest.w = sprite->imageW;
     dest.h = sprite->imageH;
-	SDL_QueryTexture(sprite->image, NULL, NULL, &src.w, &src.h);
 	/* Need a SDL function texture to renderer*/
 
 }
