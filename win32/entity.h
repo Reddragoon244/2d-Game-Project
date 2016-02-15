@@ -29,6 +29,8 @@ typedef struct Entity_S
 
 void initEntitySystem();
 void entity_free(Entity_t *entity);
+
+Entity_t *entity_load(Sprite *sprite, int health, int healthMax);/*simplest way to store a entity*/
 void closeEntitySystem();
 
 /* 

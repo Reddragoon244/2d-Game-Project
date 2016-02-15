@@ -1,35 +1,30 @@
-﻿Build started 2/13/2016 8:17:23 PM.
-     1>Project "C:\Users\Reddragoon\Desktop\gametest-master\win32\gametest.vcxproj" on node 2 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Debug\gametest.lastbuildstate".
-       InitializeBuildStatus:
+﻿Build started 2/14/2016 10:08:19 PM.
+     1>Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Debug\gametest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt entity.cpp game.c sprite.c vector.cpp
-         vector.cpp
-         sprite.c
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt game.c
          game.c
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(38): warning C4101: 'frameW' : unreferenced local variable
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(37): warning C4101: 'textureH' : unreferenced local variable
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(40): warning C4101: 'keys' : unreferenced local variable
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(38): warning C4101: 'frameH' : unreferenced local variable
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(37): warning C4101: 'textureW' : unreferenced local variable
-     1>c:\users\reddragoon\desktop\gametest-master\win32\game.c(33): warning C4101: 'playerRect' : unreferenced local variable
-         entity.cpp
-         Generating Code...
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(21): warning C4101: 'frameW' : unreferenced local variable
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(20): warning C4101: 'textureH' : unreferenced local variable
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(23): warning C4101: 'keys' : unreferenced local variable
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(21): warning C4101: 'frameH' : unreferenced local variable
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(20): warning C4101: 'textureW' : unreferenced local variable
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(15): warning C4101: 'playerRect' : unreferenced local variable
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Reddragoon\Desktop\gametest-master\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\entity.obj
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\entity.obj
          Debug\game.obj
          Debug\sprite.obj
          Debug\vector.obj
-         gametest.vcxproj -> C:\Users\Reddragoon\Desktop\gametest-master\win32\./gametest.exe
+         LINK : ./gametest.exe not found or not built by the last incremental link; performing full link
+         gametest.vcxproj -> C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\./gametest.exe
        Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"./gametest.exe;#1" /manifest Debug\gametest.exe.intermediate.manifest
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"./gametest.exe;#1" /manifest Debug\gametest.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\gametest.unsuccessfulbuild".
          Touching "Debug\gametest.lastbuildstate".
-     1>Done Building Project "C:\Users\Reddragoon\Desktop\gametest-master\win32\gametest.vcxproj" (rebuild target(s)).
+     1>Done Building Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.02
+Time Elapsed 00:00:00.88
