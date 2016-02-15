@@ -11,6 +11,8 @@
 	*@brief a simple entity structure
 	*/
 
+static const int entityMax = 1000;
+
 typedef struct Entity_S
 {
 	int inuse;
@@ -23,7 +25,11 @@ typedef struct Entity_S
 
 	void (*think)(struct Entity_S *self);
 
-}Entity_t
+}Entity_t;
+
+void initEntitySystem();
+void entity_free(Entity_t *entity);
+void closeEntitySystem();
 
 /* 
 

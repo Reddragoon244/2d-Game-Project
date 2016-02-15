@@ -11,14 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\game.c" />
-    <ClCompile Include="..\src\sprite.c" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="game.c" />
+    <ClCompile Include="sprite.c" />
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\sprite.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="sprite.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

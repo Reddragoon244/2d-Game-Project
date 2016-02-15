@@ -15,26 +15,26 @@ typedef struct
 	float x;/**<x component of the vector2d>*/
 	float y;/**<y component of the vector2d>*/
 
-}Vector2d
+}Vector2d;
 
 
 typedef struct
 {
-	union {float x; float r;}/**<x component of the vector3d>*/
-	union {float y; float g;}/**<y component of the vector3d>*/
-	union {float z; float b;}/**<z component of the vector3d>*/
+	union {float x; float r;};/**<x component of the vector3d>*/
+	union {float y; float g;};/**<y component of the vector3d>*/
+	union {float z; float b;};/**<z component of the vector3d>*/
 
-}Vector3d
+}Vector3d;
 
 
 typedef struct
 {
-	union {float x; float r;}/**<x component of the vector4d>*/
-	union {float y; float g;}/**<y component of the vector4d>*/
-	union {float z; float b;}/**<z component of the vector4d>*/
-	union {float w; float a;}/**<w component of the vector4d>*/
+	union {float x; float r;};/**<x component of the vector4d>*/
+	union {float y; float g;};/**<y component of the vector4d>*/
+	union {float z; float b;};/**<z component of the vector4d>*/
+	union {float w; float a;};/**<w component of the vector4d>*/
 
-}Vector4d
+}Vector4d;
 
 #define ZERO 0
 
