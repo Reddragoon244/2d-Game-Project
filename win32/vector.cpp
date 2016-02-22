@@ -45,3 +45,17 @@ void Scale(Vector2d v1, int scale, Vector2d v2)
 	v2.x = v1.x*scale;
 	v2.y = v1.y*scale;
 }
+
+int rect_intersect(SDL_Rect a, SDL_Rect b)
+{
+	if((a.x + a.w >= b.x) &&
+		(b.x + b.w >= a.x) &&
+		(a.y + a.h >= b.y) &&
+		(b.y + b.h >= a.y))
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+

@@ -18,7 +18,7 @@ void initEntitySystem()
 	atexit(closeEntitySystem);
 }
 
-Entity_t *entity_load(Sprite *sprite, int health, int healthMax)
+Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
 {
 	int i;
 	
@@ -85,8 +85,99 @@ void closeEntitySystem()
   int i;
    for(i = 0;i < entityMax;i++)
    {
-     /*it shouldn't matter if the sprite is already freed, 
-     sprite_free checks for that*/
+     /*it shouldn't matter if the entity is already freed, 
+     entity_free checks for that*/
       entity_free(&EntityList[i]);
    }
 }
+
+int entity_intersect(Entity_t *a, Entity_t *b)
+{
+	SDL_Rect aB, bB;
+
+	if((!a) && (!b))
+	{
+		return 0;
+	}
+
+}
+
+/*
+
+Entity_S *entity_new()
+{
+	int i;
+	for(i=0;i<entityMax;i++)
+	{
+		if(entitylist[i].inuse)
+		{
+		continue;
+		}
+
+		memset(&entitylist[i],0,sizeof(Entity_S));
+
+		entitylist[i].inuse = 1;
+		return &entityList[i];
+	}
+
+	return NULL;
+
+}
+
+
+void entity_free(Entity_t **entity)
+{
+	Entity_t *self;
+	if(!entity)return;
+	if(!*entity)return;
+
+	self = *entity;
+	freesprite(&self->sprite);
+	*entity = NULL;
+}
+
+void entity_thnk_all()
+{
+	int i;
+	for(i=0,i<entityMax;i++)
+	{
+		if(!entitylist[i].inuse)
+		{
+			continue;
+			}
+
+			if(!entitylist[i].think)
+			{
+			continue;
+			}
+
+			entitylist[i].think(&entitylist[i]);
+	}
+
+}
+
+void entity_update_all()
+{
+	int i;
+	for(i=0,i<entityMax;i++)
+	{
+		if(!entitylist[i].inuse)
+		{
+			continue;
+			}
+
+			Vector2dAdd(entitylist[i].position,entitylist[i].velocity,entitylist[i].position);
+
+			if(!entitylist[i].update)
+			{
+			continue;
+			}
+
+			entitylist[i].update(&entitylist[i]);
+	}
+
+}
+
+
+
+*/

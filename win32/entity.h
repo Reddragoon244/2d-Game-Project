@@ -11,27 +11,54 @@
 	*@brief a simple entity structure
 	*/
 
-static const int entityMax = 1000;
+static const Uint32 entityMax = 1000;
 
 typedef struct Entity_S
 {
-	int inuse;
+	int inuse;						/**<flag for tracking resource use*/
 	Sprite_T *sprite;
 	int frame;
 	Vector2d position;
 	Vector2d velocity;
+	SDL_Rect bounds;
 	float health, healthMax;
 	int state;
 
-	void (*think)(struct Entity_S *self);
+	void (*draw) (struct Entity_S *self, SDL_Renderer *renderer);
+	void (*think)(struct Entity_S *self);/**<think function for entity*/
+	int nextThink;/**<time index for next think*/
+	int thinkRate;/**<how often to run think*/
+	void (*update) (struct Entity_S *self);/**<update the entity*/
+	void (*touch) (struct Entity_S *self, struct Entity_S *other);
+	void (*free) (struct Entity_S *self);/**<cleanup function called on free*/
 
 }Entity_t;
 
-void initEntitySystem();
-void entity_free(Entity_t *entity);
+/**
+*@brief Initialization for entity systems
+*
+*/
 
-Entity_t *entity_load(Sprite *sprite, int health, int healthMax);/*simplest way to store a entity*/
+void initEntitySystem();
+
+/**
+*@brief free a entity from the memory
+*
+*/
+
+void entity_free(Entity_t **entity);
+
+/**
+*@brief return a pointer to an empty entity struct
+*return NULL on error or no more space for entities
+*/
+Entity_t *entity_load(Sprite *sprite, float health, float healthMax);
+
 void closeEntitySystem();
+
+void entity_think_all();
+void entity_update_all();
+void entity_draw_all();
 
 /* 
 

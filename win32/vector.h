@@ -40,6 +40,12 @@ int VectorCompare(Vector2d v1, Vector2d v2);
 Vector2d Normalize(Vector2d v);
 void Scale(Vector2d v1, int scale, Vector2d v2);
 
+/**
+*
+*/
+
+int rect_intersect(SDL_Rect a, SDL_Rect b);
+
 #define ZERO 0
 
 /*Adding Vectors */

@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
 	Entity_t *entitylist[entityMax];
 	playerPos.x = playerPos.y = 0;//position of image
 	playerPos.w = playerPos.h = 64;//size of the image on screen
-	int textureW, textureH;
-	int frameW, frameH, FPS = 60, frameTime = 0;
+	int FPS = 60, frameTime = 0, frame = 0;//frame is the frame of the sprite sheet
 	bool isRunning = true;
 	Uint8 keys;
 	SDL_Event ev;
@@ -34,8 +33,6 @@ int main(int argc, char *argv[])
 		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Function to load the sprite into the entitylist */
 
-		SDL_QueryTexture(entitylist[0]->sprite->image, NULL, NULL, &spritelist[0]->imageW, &spritelist[0]->imageH);/*SDL Function to stage the texture*/
-
 			while(isRunning)
 			{
 				while(SDL_PollEvent(&ev) != 0)
@@ -48,14 +45,16 @@ int main(int argc, char *argv[])
 
 				if(frameTime == 1000)
 				{
+					if(frame > 6)
+						frame = 0;
+					else
+						frame++;
+
 					frameTime = 0;
-					//playerRect.x += spritelist[0]->frameW;
-					//if(playerRect.x >= spritelist[0]->imageW)
-						//playerRect.x = 0;
 				}
 
 				SDL_RenderClear(renderer);
-				sprite_draw(entitylist[0]->sprite, 273, renderer, NULL, NULL);/*Call the draw to draw the sprite to the screen*/
+				sprite_draw(entitylist[0]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
 				SDL_RenderPresent(renderer);
 			}
 		
@@ -63,8 +62,6 @@ int main(int argc, char *argv[])
 	SDL_DestroyWindow(window);
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
-	closeSpriteSystem();
-	closeEntitySystem();
 	window = NULL;
 	texture = NULL;
 	renderer = NULL;

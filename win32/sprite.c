@@ -72,6 +72,11 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   SpriteList[i].imageH = sizey;/* Texture Size of the frames so a 4x3 sprite sheet this would be 3*/
   SpriteList[i].refcount++;/* refcount is used to keep a count of the number of times this sprite is used*/
 
+  SDL_QueryTexture(SpriteList[i].image, NULL, NULL, &SpriteList[i].imageW, &SpriteList[i].imageH);/*SDL Function to stage the texture*/
+
+  SpriteList[i].frameW = SpriteList[i].imageW / sizex;
+  SpriteList[i].frameH = SpriteList[i].imageH / sizey;
+
   return &SpriteList[i];
 
 }
@@ -106,14 +111,14 @@ void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, i
 {
 	SDL_Rect src,dest;
 
-	src.x = frame%sprite->fpl * sprite->frameW;//frame%sprite->fpl * sprite->imageW;
-	src.y = frame/sprite->fpl * sprite->frameH;//frame/sprite->fpl * sprite->imageH;
-    src.w = sprite->imageW;
-    src.h = sprite->imageH;
+	src.x = (frame%sprite->fpl) * sprite->frameW;//frame%sprite->fpl * sprite->frameW;
+	src.y = (frame/sprite->fpl) * sprite->frameH;//frame/sprite->fpl * sprite->frameH;
+    src.w = sprite->frameW;
+    src.h = sprite->frameH;
     dest.x = drawX;
     dest.y = drawY;
-    dest.w = sprite->imageW;
-    dest.h = sprite->imageH;
+    dest.w = sprite->frameW;
+    dest.h = sprite->frameH;
 	/* Need a SDL function texture to renderer*/
 	SDL_RenderCopy(renderer, sprite->image, &src, &dest);
 
