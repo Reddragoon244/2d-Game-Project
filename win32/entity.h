@@ -18,6 +18,7 @@ typedef struct Entity_S
 	int inuse;						/**<flag for tracking resource use*/
 	Sprite_T *sprite;
 	int frame;
+	int cameraEnt;
 	Vector2d position;
 	Vector2d velocity;
 	SDL_Rect bounds;

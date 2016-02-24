@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	playerPos.x = playerPos.y = 0;//position of image
 	playerPos.w = playerPos.h = 64;//size of the image on screen
 	int FPS = 60, frameTime = 0, frame = 0;//frame is the frame of the sprite sheet
-	bool isRunning = true;
+	int isRunning = 1;
 	Uint8 keys;
 	SDL_Event ev;
 
@@ -30,23 +30,29 @@ int main(int argc, char *argv[])
 		initSpriteSystem();/*The initialization of the sprite system*/
 		initEntitySystem();/*The initialization of the entity system*/
 
-		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
-		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Function to load the sprite into the entitylist */
+		spritelist[0] = sprite_load("bgtest.png", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
+		entitylist[0] = entity_load(spritelist[0], NULL, NULL);/*Function to load the sprite into the entitylist */
+
+		spritelist[1] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
+		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Function to load the sprite into the entitylist */
 
 			while(isRunning)
 			{
 				while(SDL_PollEvent(&ev) != 0)
 				{
 					if(ev.type == SDL_QUIT)
-						isRunning = false;
+						isRunning = 0;
 				}
 
 				frameTime++;
 
-				if(frameTime == 1000)
+				if(frameTime == 500)
 				{
-					if(frame > 6)
-						frame = 0;
+					if(frame < 144)
+						frame = 144;
+
+					if(frame > 150)
+						frame = 144;
 					else
 						frame++;
 
@@ -54,7 +60,8 @@ int main(int argc, char *argv[])
 				}
 
 				SDL_RenderClear(renderer);
-				sprite_draw(entitylist[0]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
+				sprite_draw(entitylist[0]->sprite, 1, renderer, NULL, NULL);/*Call the draw to draw the sprite to the screen*/
+				sprite_draw(entitylist[1]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
 				SDL_RenderPresent(renderer);
 			}
 		

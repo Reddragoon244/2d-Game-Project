@@ -11,13 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.c" />
+    <ClCompile Include="level.cpp" />
     <ClCompile Include="sprite.c" />
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="level.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>
