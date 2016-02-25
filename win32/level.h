@@ -1,6 +1,8 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
+#include<SDL.h>
+#include<SDL_image.h>
 #include "sprite.h"
 #include "vector.h"
 
@@ -21,9 +23,9 @@ typedef struct{
 	int tileHeight;
 	int tileCount;
 	Vector2d tileSize;
-	Sprite *background;
+	SDL_Texture *background;
 
-}level;
+}Level;
 
 /**
   * @brief
@@ -31,8 +33,8 @@ typedef struct{
   * @return
   */
 
-level *levelload(char *filepath);
-void levelDraw(level *level);
-void levelFree(level **level);
+Level *levelload(char *filepath, SDL_Renderer *renderer);
+void levelDraw(Level *level, SDL_Renderer *renderer);
+void levelFree(Level **level);
 
 #endif
