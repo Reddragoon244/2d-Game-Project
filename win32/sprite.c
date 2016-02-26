@@ -67,7 +67,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
 
   SpriteList[i].image = temp;/*This is the sprite's texture */
 
-  SpriteList[i].fpl = 13;/* Make every spritesheet 16 frames per line or this needs to change*/
+  SpriteList[i].fpl = 13;/* Make every spritesheet 13 frames per line or this needs to change*/
   SpriteList[i].imageW = sizex;/* Texture Size of the frames so a 4x3 sprite sheet this would be 4*/
   SpriteList[i].imageH = sizey;/* Texture Size of the frames so a 4x3 sprite sheet this would be 3*/
   SpriteList[i].refcount++;/* refcount is used to keep a count of the number of times this sprite is used*/
