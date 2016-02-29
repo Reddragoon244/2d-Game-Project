@@ -45,8 +45,22 @@ int main(int argc, char *argv[])
 
 		backg = levelload("bgtest.png", renderer);
 
-		spritelist[1] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[1] = sprite_load("Hplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[2] = sprite_load("Hplatform540.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[3] = sprite_load("Hplatform270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[4] = sprite_load("Vplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[5] = sprite_load("Vplatform540.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[6] = sprite_load("Vplatform270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+
+		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Function to load the sprite into the entitylist */
 		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[2] = entity_load(spritelist[2], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[3] = entity_load(spritelist[3], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[4] = entity_load(spritelist[4], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[5] = entity_load(spritelist[5], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[6] = entity_load(spritelist[6], 1, 1);/*Function to load the sprite into the entitylist */
+
 
 		frame = 143;/*starting frame*/
 		playerPos.y = 656;/*in world space where the player starts on the y axis*/
@@ -65,7 +79,7 @@ int main(int argc, char *argv[])
 
 				keys = SDL_GetKeyboardState(NULL);
 
-				if(keys[SDL_SCANCODE_D])/*MOVE RIGHT*/
+				if(keys[SDL_SCANCODE_D] && !keys[SDL_SCANCODE_A])/*MOVE RIGHT*/
 				{	
 					playerPos.x += moveSpeed * deltaTime;
 					frameTime += deltaTime;
@@ -84,7 +98,7 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				if(keys[SDL_SCANCODE_A])/*MOVE LEFT*/
+				if(keys[SDL_SCANCODE_A] && !keys[SDL_SCANCODE_D])/*MOVE LEFT*/
 				{	
 					playerPos.x -= moveSpeed * deltaTime;				
 					frameTime += deltaTime;
@@ -109,8 +123,10 @@ int main(int argc, char *argv[])
 					{
 						jump += moveSpeed * deltaTime;
 
-						fprintf(stderr, "%i ", jump);
-						fprintf(stderr, "%i ", jumpCheck);
+						fprintf(stderr, "%i ", entitylist[3]->bounds.h);
+						fprintf(stderr, "%i ", entitylist[3]->bounds.w);
+						fprintf(stderr, "%i ", entitylist[3]->bounds.x);
+						fprintf(stderr, "%i ", entitylist[3]->bounds.y);
 
 						playerPos.y -= moveSpeed * deltaTime;				
 						frameTime += deltaTime;
@@ -120,8 +136,11 @@ int main(int argc, char *argv[])
 
 				}
 
-				else if(playerPos.y <= 656 && jumpCheck == 0)/*Falling, need to fix*/
+				else /*Falling*/
 				{	
+					if(!keys[SDL_SCANCODE_SPACE])
+						jumpCheck = 0;
+
 					if(jump > 0)
 					{
 						jump -= moveSpeed * deltaTime;
@@ -135,7 +154,10 @@ int main(int argc, char *argv[])
 
 				SDL_RenderClear(renderer);
 				levelDraw(backg, renderer);
-				sprite_draw(entitylist[1]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
+				sprite_draw(entitylist[1]->sprite, 0, renderer, 0, 715);
+				sprite_draw(entitylist[3]->sprite, 0, renderer, 0, 620);
+				sprite_draw(entitylist[5]->sprite, 0, renderer, 238, 80);
+				sprite_draw(entitylist[0]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
 				SDL_RenderPresent(renderer);
 			}
 		

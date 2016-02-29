@@ -55,6 +55,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   {
     if(!SpriteList[i].refcount)break;
   }
+
   SDL_Surface *surface = SDL_LoadBMP(filename);
   temp = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
@@ -66,6 +67,8 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   }
 
   SpriteList[i].image = temp;/*This is the sprite's texture */
+
+  strcpy(SpriteList[i].filename, filename);/*Copy filname into Sprite filename*/
 
   SpriteList[i].fpl = 13;/* Make every spritesheet 13 frames per line or this needs to change*/
   SpriteList[i].imageW = sizex;/* Texture Size of the frames so a 4x3 sprite sheet this would be 4*/

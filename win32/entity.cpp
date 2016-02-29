@@ -57,6 +57,11 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].health = health;
   EntityList[i].healthMax = healthMax;
 
+  EntityList[i].bounds.w = EntityList[i].sprite->frameW;
+  EntityList[i].bounds.h = EntityList[i].sprite->frameH;
+  EntityList[i].bounds.x = 0;
+  EntityList[i].bounds.y = 0;
+
   EntityList[i].state = 0;/* initialize the state to 0 */
   EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this sprite is used*/
 
