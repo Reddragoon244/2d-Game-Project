@@ -6,6 +6,8 @@
 #include "sprite.h"
 #include "vector.h"
 
+static const Uint32 levelMax = 1000;
+
 typedef struct{
 
 	Sprite *sprite;
@@ -17,12 +19,11 @@ typedef struct{
 typedef struct{
 
 	char name[128];
-	Sprite *tileSet;//dont need struct tile
+	int inuse;
 	int *tiles;
-	int tileWidth;
-	int tileHeight;
+	int Width;
+	int Height;
 	int tileCount;
-	Vector2d tileSize;
 	SDL_Texture *background;
 	SDL_Texture *platform;
 
@@ -34,8 +35,13 @@ typedef struct{
   * @return
   */
 
-Level *levelload(char *filepath, SDL_Renderer *renderer);
-void levelDraw(Level *level, SDL_Renderer *renderer);
+void initPlatformSystem();
+void closePlatformSystem();
+void platform_free(Level *platform);
+Level *levelloadbg(char *filepath, SDL_Renderer *renderer);
+Level *levelloadpl(char *filepath, SDL_Renderer *renderer);
+void levelDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera);
+void levelPlatformDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera, int drawX, int drawY);
 void levelFree(Level **level);
 
 #endif

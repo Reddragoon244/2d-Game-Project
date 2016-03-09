@@ -39,6 +39,7 @@ typedef struct
 int VectorCompare(Vector2d v1, Vector2d v2);
 Vector2d Normalize(Vector2d v);
 void Scale(Vector2d v1, int scale, Vector2d v2);
+SDL_Rect rect(int x,int y,int w,int h);
 
 /**
 *
@@ -74,9 +75,9 @@ int rect_intersect(SDL_Rect a, SDL_Rect b);
 #define Vector4d_Negate(a, b) (b.x=-a.x,b.y=-a.y,b.z=-a.z,b.w=-a.w)/**<macro to negate 4Dvectors>*/
 
 /*Set Vectors */
-#define Vector2d_Set(a, x, y) (a.x=x,a.y=y)/**<macro to set 2Dvectors>*/   
-#define Vector3d_Set(a, x, y, z) (a.x=x,a.y=y,a.z=z)/**<macro to set 3Dvectors>*/
-#define Vector4d_Set(a, x, y, z, w) (a.x=x,a.y=y,a.z=z,a.w=w)/**<macro to set 4Dvectors>*/
+#define Vector2d_Set(a, b, c) (a.x=b,a.y=c)/**<macro to set 2Dvectors>*/   
+#define Vector3d_Set(a, b, c, d) (a.x=b,a.y=c,a.z=d)/**<macro to set 3Dvectors>*/
+#define Vector4d_Set(a, b, c, d, e) (a.x=b,a.y=c,a.z=d,a.w=e)/**<macro to set 4Dvectors>*/
 
 /*Dot Vectors */
 #define Vector2d_Dot(x, y) (x.x*y.x+x.y*y.y)/**<macro to Dot Product 2Dvectors>*/   

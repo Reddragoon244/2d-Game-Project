@@ -5,6 +5,7 @@
 #include "entity.h"
 #include "vector.h"
 #include "level.h"
+#include "Camera.h"
 #include <string>
 
 SDL_Renderer *renderer;
@@ -12,11 +13,12 @@ SDL_Texture *texture;
 
 int main(int argc, char *argv[])
 {
-	SDL_Window *window = NULL;//always make a poiter null at initial
+	SDL_Window *window = NULL;//always make a pointer null at initial
 	SDL_Surface *temp = NULL;
 	SDL_Rect playerRect, playerPos;
 	Sprite *spritelist[spriteMax];
 	Entity_t *entitylist[entityMax];
+	Level *levellist[levelMax];
 	Level *backg;
 	playerPos.x = 0;//position of image.x
 	playerPos.y = 0;//position of image.y
@@ -33,6 +35,7 @@ int main(int argc, char *argv[])
 	int jumpCheck = 1;
 	int jump = 0;
 	int jumpMax = 200;
+	int transCheck = 0;
 
 		window = SDL_CreateWindow("Into the Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_SHOWN);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);	
@@ -43,24 +46,27 @@ int main(int argc, char *argv[])
 		initSpriteSystem();/*The initialization of the sprite system*/
 		initEntitySystem();/*The initialization of the entity system*/
 
-		backg = levelload("bgtest.png", renderer);
+		backg = levelloadbg("background.png", renderer);
 
 		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[1] = sprite_load("Hplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[2] = sprite_load("Hplatform540.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[3] = sprite_load("Hplatform270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[4] = sprite_load("Vplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[5] = sprite_load("Vplatform540.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[6] = sprite_load("Vplatform270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[7] = sprite_load("enemy1.bmp", 3, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[8] = sprite_load("enemy2.bmp", 3, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[9] = sprite_load("lever.bmp", 2, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[10] = sprite_load("box.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
+		
+
+		levellist[0] = levelloadpl("Hplatform1080.bmp", renderer);/*Platform Sprite Load*/
+		levellist[1] = levelloadpl("Hplatform540.bmp", renderer);/*Platform Sprite Load*/
+		levellist[2] = levelloadpl("Hplatform270.bmp", renderer);/*Platform Sprite Load*/
+		levellist[3] = levelloadpl("Vplatform1080.bmp", renderer);/*Platform Sprite Load*/
+		levellist[4] = levelloadpl("Vplatform540.bmp", renderer);/*Platform Sprite Load*/
+		levellist[5] = levelloadpl("Vplatform270.bmp", renderer);/*Platform Sprite Load*/
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[2] = entity_load(spritelist[2], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[3] = entity_load(spritelist[3], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[4] = entity_load(spritelist[4], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[5] = entity_load(spritelist[5], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[6] = entity_load(spritelist[6], 1, 1);/*Function to load the sprite into the entitylist */
-
+		entitylist[7] = entity_load(spritelist[7], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[8] = entity_load(spritelist[8], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[9] = entity_load(spritelist[9], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[10] = entity_load(spritelist[10], 1, 1);/*Function to load the sprite into the entitylist */
 
 		frame = 143;/*starting frame*/
 		playerPos.y = 656;/*in world space where the player starts on the y axis*/
@@ -68,7 +74,7 @@ int main(int argc, char *argv[])
 			while(isRunning)
 			{
 				previousTime = currentTime;
-				currentTime = SDL_GetTicks() / 3;
+				currentTime = SDL_GetTicks() / 4;
 				deltaTime = (currentTime - previousTime);
 
 				while(SDL_PollEvent(&ev) != 0)
@@ -96,8 +102,9 @@ int main(int argc, char *argv[])
 
 						frameTime = 0;
 					}
-				}
 
+				}
+				
 				if(keys[SDL_SCANCODE_A] && !keys[SDL_SCANCODE_D])/*MOVE LEFT*/
 				{	
 					playerPos.x -= moveSpeed * deltaTime;				
@@ -115,6 +122,7 @@ int main(int argc, char *argv[])
 
 						frameTime = 0;
 					}
+
 				}
 
 				if(keys[SDL_SCANCODE_SPACE] && jumpCheck == 1)/*Jumping*/
@@ -122,11 +130,6 @@ int main(int argc, char *argv[])
 					if(jump < jumpMax)
 					{
 						jump += moveSpeed * deltaTime;
-
-						fprintf(stderr, "%i ", entitylist[3]->bounds.h);
-						fprintf(stderr, "%i ", entitylist[3]->bounds.w);
-						fprintf(stderr, "%i ", entitylist[3]->bounds.x);
-						fprintf(stderr, "%i ", entitylist[3]->bounds.y);
 
 						playerPos.y -= moveSpeed * deltaTime;				
 						frameTime += deltaTime;
@@ -152,12 +155,54 @@ int main(int argc, char *argv[])
 						jumpCheck = 1;
 				}
 
+				/*Collision Detection*/
+				
+
+				if(keys[SDL_SCANCODE_T])/*Entering the Twilight Realm*/
+				{
+					if(transCheck == 0)
+					{
+						backg = levelloadbg("background2.png", renderer);
+						printf("hi");
+						transCheck = 1;
+					}
+					else
+					{
+
+					}
+				}
+
+				if(keys[SDL_SCANCODE_Y])/*Entering the Real World*/
+				{
+					if(transCheck == 1)
+					{
+						backg = levelloadbg("background.png", renderer);
+						transCheck = 0;
+					}
+					else
+					{
+
+					}
+				}
+				
+				Camera.x = playerPos.x - 540;
+
+				camera_live_set(Camera);
+
 				SDL_RenderClear(renderer);
-				levelDraw(backg, renderer);
-				sprite_draw(entitylist[1]->sprite, 0, renderer, 0, 715);
-				sprite_draw(entitylist[3]->sprite, 0, renderer, 0, 620);
-				sprite_draw(entitylist[5]->sprite, 0, renderer, 238, 80);
-				sprite_draw(entitylist[0]->sprite, frame, renderer, playerPos.x, playerPos.y);/*Call the draw to draw the sprite to the screen*/
+				levelDraw(backg, renderer, Camera);
+
+				if(transCheck == 0)/*Real World Platforms*/
+				{
+					levelPlatformDraw(levellist[0], renderer, Camera, 640, 60);
+				}
+				else/*Twilight Realms Platforms*/
+				{
+					
+				}
+
+				sprite_draw(entitylist[0]->sprite, frame, renderer, playerPos.x, playerPos.y, 1, Camera);/*Call the draw to draw the sprite to the screen*/
+
 				SDL_RenderPresent(renderer);
 			}
 		

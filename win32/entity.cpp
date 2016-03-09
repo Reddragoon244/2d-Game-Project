@@ -54,6 +54,9 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].velocity.x = 0;
   EntityList[i].velocity.y = 0;
 
+  EntityList[i].origin.x = EntityList[i].sprite->frameW/2;
+  EntityList[i].origin.y = EntityList[i].sprite->frameH/2;
+
   EntityList[i].health = health;
   EntityList[i].healthMax = healthMax;
 
@@ -96,6 +99,44 @@ void closeEntitySystem()
    }
 }
 
+int entity_intersect_rect(Entity_t *a,SDL_Rect r)
+{
+    SDL_Rect aB;
+    if (!a)
+    {
+        return 0;
+    }
+    aB = rect(
+        a->position.x + a->bounds.x,
+        a->position.y + a->bounds.y,
+        a->bounds.w,
+        a->bounds.h);
+    return rect_intersect(aB,r);
+}
+
+Entity_t *entity_intesect_all(Entity_t *a)
+{
+    int i;
+    if (!a)return NULL;
+    for (i = 0; i < entityMax;i++)
+    {
+        if (!EntityList[i].inuse)
+        {
+            continue;
+        }
+        if (a == &EntityList[i])
+        {
+            continue;
+            /*don't clip self*/
+        }
+        if (entity_intersect(a, &EntityList[i]))
+        {
+            return &EntityList[i];
+        }
+    }
+    return NULL;
+}
+
 int entity_intersect(Entity_t *a, Entity_t *b)
 {
 	SDL_Rect aB, bB;
@@ -105,6 +146,15 @@ int entity_intersect(Entity_t *a, Entity_t *b)
 		return 0;
 	}
 
+	aB = rect(a->position.x + a->bounds.x,
+			a->position.y + a->bounds.y,
+			a->bounds.w,
+			a->bounds.h);
+	bB = rect(b->position.x + b->bounds.x,
+        b->position.y + b->bounds.y,
+        b->bounds.w,
+        b->bounds.h);
+    return rect_intersect(aB,bB);
 }
 
 /*

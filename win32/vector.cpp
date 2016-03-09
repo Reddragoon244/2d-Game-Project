@@ -13,6 +13,16 @@ int VectorCompare(Vector2d v1, Vector2d v2)
 	return 1;
 }
 
+SDL_Rect rect(int x,int y,int w,int h)
+{
+    SDL_Rect r;
+    r.x = x;
+    r.y = y;
+    r.w = w;
+    r.h = h;
+    return r;
+}
+
 /*Function to normalize a 2d vector */
 Vector2d Normalize(Vector2d v)
 {

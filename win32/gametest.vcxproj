@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="camera.c" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.c" />
     <ClCompile Include="level.cpp" />
