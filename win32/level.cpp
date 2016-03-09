@@ -9,61 +9,40 @@ Level LevelList[levelMax];/*list of sprites*/
 Level *Mlevel;
 int NumLevel;
 
-void initPlatformSystem()
+void initLevelSystem()
 {
 	levelList = (Level *)malloc(sizeof(Level)*levelMax);
 	memset(LevelList, 0,sizeof(Level)*levelMax);
-	atexit(closePlatformSystem);
+	atexit(closeLevelSystem);
 }
 
-void closePlatformSystem()
+void closeLevelSystem()
 {
   int i;
    for(i = 0;i < levelMax;i++)
    {
      /*it shouldn't matter if the entity is already freed, 
      entity_free checks for that*/
-      platform_free(&LevelList[i]);
+      level_free(&LevelList[i]);
    }
 }
 
-void platform_free(Level *platform)
+void level_free(Level *level)
 {
   /*first lets check to see if the entity sprite is still being used.*/
-  platform->inuse--;
-  if(platform->inuse == 0)
+  level->inuse--;
+  if(level->inuse == 0)
   {
-		strcpy(platform->name,"\0");
+		strcpy(level->name,"\0");
 		
-		if(platform->background != NULL)SDL_DestroyTexture(platform->background);
-			platform->background = NULL;
+		if(level->background != NULL)SDL_DestroyTexture(level->background);
+			level->background = NULL;
   }
  /*and then lets make sure we don't leave any potential seg faults 
   lying around*/
 }
 
 Level *levelloadbg(char *filepath, SDL_Renderer *renderer)
-{
-	SDL_Texture *texture = NULL;
-	SDL_Surface *surface = IMG_Load(filepath);
-
-	if(surface == NULL)
-	  fprintf(stderr, "Error surface null", SDL_GetError());
-	else
-	{
-		texture = SDL_CreateTextureFromSurface(renderer, surface);
-		if(texture == NULL)
-			fprintf(stderr, "Error texture null", SDL_GetError());
-	}
-	        
-	SDL_FreeSurface(surface);
-
-	level.background = texture;
-
-	return &level;
-}
-
-Level *levelloadpl(char *filepath, SDL_Renderer *renderer)
 {
 	int i;
 
@@ -105,7 +84,7 @@ Level *levelloadpl(char *filepath, SDL_Renderer *renderer)
 
 	SDL_QueryTexture(texture, NULL, NULL, &LevelList[i].Width, &LevelList[i].Height);
 
-	LevelList[i].platform = texture;
+	LevelList[i].background = texture;
 
 	return &LevelList[i];
 }
@@ -113,22 +92,6 @@ Level *levelloadpl(char *filepath, SDL_Renderer *renderer)
 void levelDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera)
 {	
 	SDL_RenderCopy(renderer, level->background, &Camera, NULL);
-}
-
-void levelPlatformDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera, int drawX, int drawY)
-{	
-	SDL_Rect src,dest;
-
-	src.x = 0;
-	src.y = 0;
-    src.w = level->Width;
-    src.h = level->Height;
-    dest.x = drawX - Camera.x;
-    dest.y = drawY - Camera.y;
-    dest.w = level->Width;
-    dest.h = level->Height;
-
-	SDL_RenderCopy(renderer, level->platform, &src, &dest);
 }
 
 void levelFree(Level **level)

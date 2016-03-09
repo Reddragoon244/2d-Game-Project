@@ -35,13 +35,13 @@ typedef struct{
   * @return
   */
 
-void initPlatformSystem();
-void closePlatformSystem();
-void platform_free(Level *platform);
+void initLevelSystem();
+void closeLevelSystem();
+void level_free(Level *level);
 Level *levelloadbg(char *filepath, SDL_Renderer *renderer);
-Level *levelloadpl(char *filepath, SDL_Renderer *renderer);
 void levelDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera);
 void levelPlatformDraw(Level *level, SDL_Renderer *renderer, SDL_Rect &Camera, int drawX, int drawY);
+void levelChange(Level *level);
 void levelFree(Level **level);
 
 #endif

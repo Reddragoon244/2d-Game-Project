@@ -157,6 +157,8 @@ int entity_intersect(Entity_t *a, Entity_t *b)
     return rect_intersect(aB,bB);
 }
 
+
+
 /*
 
 Entity_S *entity_new()
