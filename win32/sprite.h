@@ -29,9 +29,7 @@ void closeSpriteSystem();/*call this before you exit to make sure all the memory
 
 Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer);/*simplestway to load a file*/
 void sprite_free(Sprite *sprite);
-void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, int drawY);
-
-
+void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, int drawY, int scale, SDL_Rect &Camera);
 /*
 Vector 2D, 3D, 4D
 
@@ -42,5 +40,4 @@ getLength, GetLengthSquared
 getAngle, getAngle to vector
 
 */
-
 #endif 

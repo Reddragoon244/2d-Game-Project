@@ -21,6 +21,7 @@ typedef struct Entity_S
 	int cameraEnt;
 	Vector2d position;
 	Vector2d velocity;
+	Vector2d origin;
 	SDL_Rect bounds;
 	float health, healthMax;
 	int state;
@@ -60,6 +61,11 @@ void closeEntitySystem();
 void entity_think_all();
 void entity_update_all();
 void entity_draw_all();
+
+int entity_intersect_all(Entity_t *a);
+int entity_intersect_rect(Entity_t *a,SDL_Rect r);
+int entity_intersect(Entity_t *a, Entity_t *b);
+void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera);
 
 /* 
 

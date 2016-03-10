@@ -3,13 +3,14 @@
 
 #include <SDL.h>
 #include "vector.h"
+#include "level.h"
 
+static SDL_Rect Camera = {0, 0, 1080, 720};
 
 SDL_Rect cameraGetActiveCamera();
-Vector2d cameraPosition();
-void cameraSetPosition(Vector2d pos);
-void cameraSetSize(Vector2d size);
-Vector2d cameraGetSize();
 
+void camera_set_position(Vector2d pos);
+void camera_set_size(Vector2d size);
+void camera_live_set(SDL_Rect &a);
 
 #endif

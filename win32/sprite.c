@@ -31,7 +31,7 @@ void initSpriteSystem()
 Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
 {
 	int i;
-  SDL_Texture *temp;
+  SDL_Texture *temp = NULL;
 
   /*first search to see if the requested sprite image is alreday loaded*/
   for(i = 0; i < NumSprites; i++)
@@ -55,6 +55,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   {
     if(!SpriteList[i].refcount)break;
   }
+  
   SDL_Surface *surface = SDL_LoadBMP(filename);
   temp = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
@@ -67,7 +68,9 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
 
   SpriteList[i].image = temp;/*This is the sprite's texture */
 
-  SpriteList[i].fpl = 13;/* Make every spritesheet 16 frames per line or this needs to change*/
+  strcpy(SpriteList[i].filename, filename);/*Copy filname into Sprite filename*/
+
+  SpriteList[i].fpl = sizex;/* Make every spritesheet 13 frames per line or this needs to change*/
   SpriteList[i].imageW = sizex;/* Texture Size of the frames so a 4x3 sprite sheet this would be 4*/
   SpriteList[i].imageH = sizey;/* Texture Size of the frames so a 4x3 sprite sheet this would be 3*/
   SpriteList[i].refcount++;/* refcount is used to keep a count of the number of times this sprite is used*/
@@ -107,7 +110,7 @@ void closeSpriteSystem()
    }
 }
 
-void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, int drawY)
+void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, int drawY, int scale, SDL_Rect &Camera)
 {
 	SDL_Rect src,dest;
 
@@ -115,10 +118,10 @@ void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, i
 	src.y = (frame/sprite->fpl) * sprite->frameH;//frame/sprite->fpl * sprite->frameH;
     src.w = sprite->frameW;
     src.h = sprite->frameH;
-    dest.x = drawX;
-    dest.y = drawY;
-    dest.w = sprite->frameW;
-    dest.h = sprite->frameH;
+    dest.x = drawX - Camera.x;
+    dest.y = drawY - Camera.y;
+    dest.w = sprite->frameW * scale;
+    dest.h = sprite->frameH * scale;
 	/* Need a SDL function texture to renderer*/
 	SDL_RenderCopy(renderer, sprite->image, &src, &dest);
 
