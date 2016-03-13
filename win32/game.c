@@ -6,6 +6,7 @@
 #include "vector.h"
 #include "level.h"
 #include "Camera.h"
+#include "Animation.h"
 #include <string>
 
 SDL_Renderer *renderer;
@@ -14,20 +15,19 @@ SDL_Texture *texture;
 int main(int argc, char *argv[])
 {
 	SDL_Window *window = NULL;//always make a pointer null at initial
-	SDL_Surface *temp = NULL;
-	SDL_Rect playerRect, playerPos;
+	SDL_Rect playerPos, playerTempPos;
 	Sprite *spritelist[spriteMax];
 	Entity_t *entitylist[entityMax];
 	Level *backg[levelMax];
 	playerPos.x = 0;//position of image.x
+	playerTempPos.x = 0;
 	playerPos.y = 0;//position of image.y
-	int FPS = 60, frame = 0;//frame is the frame of the sprite sheet
+	playerTempPos.y = 0;
+	int playerframe = 0;//playerframe is the frame of the player sprite sheet
 	int isRunning = 1;
 	const Uint8 *keys;
 	SDL_Event ev;
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
-	int currentTime = 0;
-	int previousTime = 0;
 	float frameTime = 0;
 	float deltaTime = 0;
 	float moveSpeed = 1.0;
@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 	int jump = 0;
 	int jumpMax = 200;
 	int transCheck = 0;
+	int groundCheck = 1;
 
 		window = SDL_CreateWindow("Into the Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_SHOWN);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);	
@@ -73,15 +74,13 @@ int main(int argc, char *argv[])
 		entitylist[9] = entity_load(spritelist[9], 1, 1);/*Function to load the sprite into the entitylist */
 		entitylist[10] = entity_load(spritelist[10], 1, 1);/*Function to load the sprite into the entitylist */
 
-		frame = 143;/*starting frame*/
-		playerPos.y = 656;/*in world space where the player starts on the y axis*/
+		playerframe = 143;/*starting frame*/
+		playerTempPos.y = playerPos.y = 656;
 		backg[2] = backg[0];
 
 			while(isRunning)
 			{
-				previousTime = currentTime;
-				currentTime = SDL_GetTicks() / 4;
-				deltaTime = (currentTime - previousTime);
+				deltaTime = time_animation();
 
 				while(SDL_PollEvent(&ev) != 0)
 				{
@@ -91,82 +90,98 @@ int main(int argc, char *argv[])
 
 				keys = SDL_GetKeyboardState(NULL);
 
-				if(keys[SDL_SCANCODE_D] && !keys[SDL_SCANCODE_A])/*MOVE RIGHT*/
+//////////////////////////////////*Move Right*//////////////////////////////////////////
+				if(keys[SDL_SCANCODE_D] && !keys[SDL_SCANCODE_A])
+				{						
+					if(entity_intersect_all(entitylist[0]))
+					{
+						/*Collision with anything*/
+						playerPos.x = playerTempPos.x;
+					}
+					else if(!entity_intersect_all(entitylist[0]))
+					{
+						/*Not Colliding*/
+						playerTempPos.x = playerPos.x;
+
+						playerPos.x += moveSpeed * deltaTime;
+					    frameTime += deltaTime;
+
+						playerframe = sprite_animation(150, 143, 12.5f, frameTime);
+					}
+				}
+//////////////////////////////////*Move Left*////////////////////////////////////////////				
+				if(keys[SDL_SCANCODE_A] && !keys[SDL_SCANCODE_D])
 				{	
 					if(entity_intersect_all(entitylist[0]))
 					{
 						/*Collision with anything*/
+						playerPos.x = playerTempPos.x;
 					}
-					else 
+					else if(!entity_intersect_all(entitylist[0]))
 					{
 						/*Not Colliding*/
-					}
-					playerPos.x += moveSpeed * deltaTime;
-					frameTime += deltaTime;
+						playerTempPos.x = playerPos.x;
 
-					if(frameTime >= 12.5f)
-					{
-						if(frame < 143)
-							frame = 143;
+						playerPos.x -= moveSpeed * deltaTime;
+						frameTime += deltaTime;
 
-						if(frame > 150)
-							frame = 143;
-					else
-							frame++;
-
-						frameTime = 0;
-					}
-
+						playerframe = sprite_animation(123, 117, 12.5f, frameTime);
+					}	
 				}
 				
-				if(keys[SDL_SCANCODE_A] && !keys[SDL_SCANCODE_D])/*MOVE LEFT*/
-				{	
-					playerPos.x -= moveSpeed * deltaTime;
-					frameTime += deltaTime;
+//////////////////////////////////*Jumping*//////////////////////////////////////////////
 
-					if(frameTime >= 12.5f)
-					{
-						if(frame < 117)
-							frame = 117;
-
-						if(frame > 123)
-							frame = 117;
-					else
-							frame++;
-
-						frameTime = 0;
-					}
-
-				}
-
-				if(keys[SDL_SCANCODE_SPACE] && jumpCheck == 1)/*Jumping*/
+				if(keys[SDL_SCANCODE_SPACE] && jumpCheck == 1)
 				{
-					if(jump < jumpMax)
-					{
-						jump += moveSpeed * deltaTime;
-
-						playerPos.y -= moveSpeed * deltaTime;				
-						frameTime += deltaTime;
-					}
-					else 
-						jumpCheck = 0;
+						if(entity_intersect_all(entitylist[0]) && groundCheck == 1)
+						{
+							/*Collision with anything*/
+							playerPos.y = playerTempPos.y;
+						}
+						else 
+						{
+							/*Not Colliding*/
+							playerTempPos.y = playerPos.y;
+							playerPos.y -= moveSpeed * deltaTime;				
+							frameTime += deltaTime;
+						}
 
 				}
-
-				else /*Falling*/
+//////////////////////////////////*Falling*//////////////////////////////////////////////
+				else 
 				{	
 					if(!keys[SDL_SCANCODE_SPACE])
 						jumpCheck = 0;
 
-					if(jump > 0)
+					if(jumpCheck == 0)
 					{
-						jump -= moveSpeed * deltaTime;
 
-						playerPos.y += moveSpeed * deltaTime;				
-						frameTime += deltaTime;
+						if(entity_ground_intersect_all(entitylist[0]) && groundCheck == 0)
+						{
+							/*Collision with anything*/
+							playerPos.y = playerTempPos.y;
+							groundCheck = 1;
+
+						}
+						else if(!entity_ground_intersect_all(entitylist[0]))
+						{
+							/*Not Colliding*/
+
+							playerTempPos.y = playerPos.y;
+														
+							if(playerPos.y < 656)
+								playerPos.y += moveSpeed * deltaTime;	
+
+							frameTime += deltaTime;
+
+							groundCheck = 0;
+						}
+
+						if(keys[SDL_SCANCODE_SPACE])
+							jumpCheck = 1;
+
 					}
-					else
-						jumpCheck = 1;
+					
 				}
 
 				/*Collision Detection*/
@@ -201,20 +216,35 @@ int main(int argc, char *argv[])
 
 				SDL_RenderClear(renderer);
 				
+				printf("(%i, %i)\n", playerPos.x, playerPos.y);
+				printf("%i", entity_intersect_all(entitylist[0]));
 
 				if(transCheck == 0)/*Real World Platforms*/
 				{
 					levelDraw(backg[0], renderer, Camera);
+					entity_draw(entitylist[1], 0, renderer, 0, 780, Camera);
 					entity_draw(entitylist[3], 0, renderer, 640, 60, Camera);
 					entity_draw(entitylist[4], 0, renderer, 1080, 0, Camera);
+
+					/*Not Drawn*/
+					entitylist[2]->drawn = 0;
 				}
 				else/*Twilight Realms Platforms*/
 				{
 					levelDraw(backg[1], renderer, Camera);
+					//entity_draw(entitylist[5], 0, renderer, 540, 0, Camera);
 					entity_draw(entitylist[2], 0, renderer, 0, 540, Camera);
+
+					/*Not Drawn*/
+					entitylist[1]->drawn = 0;
+					entitylist[3]->drawn = 0;
+					entitylist[4]->drawn = 0;
+
+					entity_draw(entitylist[3], 0, renderer, 340, 60, Camera);
+
 				}
 
-				entity_draw(entitylist[0], frame, renderer, playerPos.x, playerPos.y, Camera);/*Call the draw to draw the sprite to the screen*/
+				entity_draw(entitylist[0], playerframe, renderer, playerPos.x, playerPos.y, Camera);/*Call the draw to draw the sprite to the screen*/
 
 				SDL_RenderPresent(renderer);
 			}

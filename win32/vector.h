@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include <stdlib.h>
 #include <math.h>
 
 /**
@@ -40,12 +41,14 @@ int VectorCompare(Vector2d v1, Vector2d v2);
 Vector2d Normalize(Vector2d v);
 void Scale(Vector2d v1, int scale, Vector2d v2);
 SDL_Rect rect(int x,int y,int w,int h);
+int CompareRect(SDL_Rect a, SDL_Rect b);
 
 /**
 *
 */
 
 int rect_intersect(SDL_Rect a, SDL_Rect b);
+int rect_ground(SDL_Rect a, SDL_Rect b);
 
 #define ZERO 0
 

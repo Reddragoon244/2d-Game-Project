@@ -3,6 +3,7 @@
 #include "SDL_ttf.h"
 #include <math.h>
 #include "vector.h"
+#include <cstdio>
 
 /*Function to compare two vectors */
 int VectorCompare(Vector2d v1, Vector2d v2)
@@ -21,6 +22,16 @@ SDL_Rect rect(int x,int y,int w,int h)
     r.w = w;
     r.h = h;
     return r;
+}
+
+int CompareRect(SDL_Rect a, SDL_Rect b)
+{
+	if(a.x == b.x && a.y == b.y && a.w == b.w && a.h == b.h)
+		return 1;
+	if(a.x == b.x && a.y == b.y)
+		return 1;
+
+		return 0;
 }
 
 /*Function to normalize a 2d vector */
@@ -62,6 +73,16 @@ int rect_intersect(SDL_Rect a, SDL_Rect b)
 		(b.x + b.w >= a.x) &&
 		(a.y + a.h >= b.y) &&
 		(b.y + b.h >= a.y))
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+
+int rect_ground(SDL_Rect a, SDL_Rect b)
+{
+	if(a.y + a.h >= b.y)
 	{
 		return 1;
 	}

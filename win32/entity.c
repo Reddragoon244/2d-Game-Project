@@ -57,13 +57,20 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].origin.x = EntityList[i].sprite->frameW/2;
   EntityList[i].origin.y = EntityList[i].sprite->frameH/2;
 
-  EntityList[i].health = health;
-  EntityList[i].healthMax = healthMax;
-
   EntityList[i].bounds.w = EntityList[i].sprite->frameW;
   EntityList[i].bounds.h = EntityList[i].sprite->frameH;
   EntityList[i].bounds.x = 0;
   EntityList[i].bounds.y = 0;
+
+  EntityList[i].groundBounds.w = EntityList[i].sprite->frameW - 2;
+  EntityList[i].groundBounds.h = 5;
+  EntityList[i].groundBounds.x = 1;
+  EntityList[i].groundBounds.y = 64;
+
+  EntityList[i].drawn = 0;
+
+  EntityList[i].health = health;
+  EntityList[i].healthMax = healthMax;
 
   EntityList[i].state = 0;/* initialize the state to 0 */
   EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this sprite is used*/
@@ -117,7 +124,10 @@ int entity_intersect_rect(Entity_t *a,SDL_Rect r)
 int entity_intersect_all(Entity_t *a)
 {
     int i;
+	SDL_Rect zero = {0,0,0,0};
+
     if (!a)return NULL;
+
     for (i = 0; i < entityMax;i++)
     {
         if (!EntityList[i].inuse)
@@ -129,9 +139,33 @@ int entity_intersect_all(Entity_t *a)
             /*don't clip self*/
         }
 		else if(entity_intersect(a, &EntityList[i]))
+		{
+				return 1;
+        }
+    }
+    return 0;
+}
+
+int entity_ground_intersect_all(Entity_t *a)
+{
+    int i;
+	SDL_Rect zero = {0,0,0,0};
+
+    if (!a)return NULL;
+
+    for (i = 0; i < entityMax;i++)
+    {
+        if (!EntityList[i].inuse)
         {
-			printf("%s", &EntityList[i].sprite->filename);
-            return 1;
+            continue;
+        }
+        if (a == &EntityList[i])
+        {
+            /*don't clip self*/
+        }
+		else if(entity_ground_intersect(a, &EntityList[i]))
+		{
+				return 1;
         }
     }
     return 0;
@@ -146,10 +180,40 @@ int entity_intersect(Entity_t *a, Entity_t *b)
 		return 0;
 	}
 
+	if(a->drawn == 0 || b->drawn == 0)
+	{
+		return 0;
+	}
+
 	aB = rect(a->position.x + a->bounds.x,
 			a->position.y + a->bounds.y,
 			a->bounds.w,
 			a->bounds.h);
+	bB = rect(b->position.x + b->bounds.x,
+        b->position.y + b->bounds.y,
+        b->bounds.w,
+        b->bounds.h);
+    return rect_intersect(aB,bB);
+}
+
+int entity_ground_intersect(Entity_t *a, Entity_t *b)/*First entity has to be the entity you want to ground check*/
+{
+	SDL_Rect aB, bB;
+
+	if((!a) && (!b))
+	{
+		return 0;
+	}
+
+	if(a->drawn == 0 || b->drawn == 0)
+	{
+		return 0;
+	}
+
+	aB = rect(a->position.x + a->groundBounds.x,
+			a->position.y + a->groundBounds.y,
+			a->groundBounds.w,
+			a->groundBounds.h);
 	bB = rect(b->position.x + b->bounds.x,
         b->position.y + b->bounds.y,
         b->bounds.w,
@@ -169,6 +233,8 @@ void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX,
 	entity->position.y = dest.y = drawY - Camera.y;
     dest.w = entity->sprite->frameW;
     dest.h = entity->sprite->frameH;
+
+	entity->drawn = 1;
 
 	SDL_RenderCopy(renderer, entity->sprite->image, &src, &dest);
 }
