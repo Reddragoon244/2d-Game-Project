@@ -15,7 +15,9 @@
     <ClCompile Include="camera.c" />
     <ClCompile Include="entity.c" />
     <ClCompile Include="game.c" />
+    <ClCompile Include="items.c" />
     <ClCompile Include="level.c" />
+    <ClCompile Include="physics.c" />
     <ClCompile Include="sprite.c" />
     <ClCompile Include="vector.c" />
   </ItemGroup>
@@ -23,7 +25,9 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="items.h" />
     <ClInclude Include="level.h" />
+    <ClInclude Include="physics.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>

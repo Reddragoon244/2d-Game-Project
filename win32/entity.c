@@ -22,16 +22,6 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
 {
 	int i;
 	
-  /*first search to see if the requested entity sprite image is alreday loaded*/
-  for(i = 0; i < NumEntity; i++)
-  {
-    if(strncmp(sprite->filename,EntityList[i].sprite->filename,20)==0)
-    {
-      EntityList[i].inuse++;
-      return &EntityList[i];
-    }
-  }
-
   /*makesure we have the room for a new entity*/
   if(NumEntity + 1 >= entityMax)
   {
@@ -57,20 +47,37 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].origin.x = EntityList[i].sprite->frameW/2;
   EntityList[i].origin.y = EntityList[i].sprite->frameH/2;
 
-  EntityList[i].bounds.w = EntityList[i].sprite->frameW;
-  EntityList[i].bounds.h = EntityList[i].sprite->frameH;
-  EntityList[i].bounds.x = 0;
-  EntityList[i].bounds.y = 0;
+  //EntityList[i].bounds.w = EntityList[i].sprite->frameW;
+  //EntityList[i].bounds.h = EntityList[i].sprite->frameH;
+  //EntityList[i].bounds.x = 0;
+  //EntityList[i].bounds.y = 0;
 
   EntityList[i].groundBounds.w = EntityList[i].sprite->frameW - 2;
   EntityList[i].groundBounds.h = 5;
   EntityList[i].groundBounds.x = 1;
-  EntityList[i].groundBounds.y = 64;
+  EntityList[i].groundBounds.y = EntityList[i].sprite->frameW;
+
+  EntityList[i].EventBounds.w = 0;
+  EntityList[i].EventBounds.h = 0;
+  EntityList[i].EventBounds.x = 0;
+  EntityList[i].EventBounds.y = 0;
+
+  EntityList[i].PositionRect.w = 0;
+  EntityList[i].PositionRect.h = 0;
+  EntityList[i].PositionRect.x = 0;
+  EntityList[i].PositionRect.y = 0;
+
+  EntityList[i].PositionTemp.w = 0;
+  EntityList[i].PositionTemp.h = 0;
+  EntityList[i].PositionTemp.x = 0;
+  EntityList[i].PositionTemp.y = 0;
 
   EntityList[i].drawn = 0;
 
   EntityList[i].health = health;
   EntityList[i].healthMax = healthMax;
+
+  EntityList[i].think;
 
   EntityList[i].state = 0;/* initialize the state to 0 */
   EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this sprite is used*/
@@ -140,10 +147,62 @@ int entity_intersect_all(Entity_t *a)
         }
 		else if(entity_intersect(a, &EntityList[i]))
 		{
+			printf("%s \n", EntityList[i].sprite->filename);
 				return 1;
         }
     }
     return 0;
+}
+
+int entity_intersect_event_all(Entity_t *a)
+{
+	int i;
+	SDL_Rect zero = {0,0,0,0};
+
+    if (!a)return NULL;
+
+    for (i = 0; i < entityMax;i++)
+    {
+        if (!EntityList[i].inuse)
+        {
+            continue;
+        }
+        if (a == &EntityList[i])
+        {
+            /*don't clip self*/
+        }
+		else if(entity_intersect_event(a, &EntityList[i]))
+		{
+			printf("%s \n", EntityList[i].sprite->filename);
+				return 1;
+        }
+    }
+    return 0;
+}
+
+Entity_t *entity_return_intersect_all(Entity_t *a)
+{
+    int i;
+	SDL_Rect zero = {0,0,0,0};
+
+    if (!a)return NULL;
+
+    for (i = 0; i < entityMax;i++)
+    {
+        if (!EntityList[i].inuse)
+        {
+            continue;
+        }
+        if (a == &EntityList[i])
+        {
+            /*don't clip self*/
+        }
+		else if(entity_intersect(a, &EntityList[i]))
+		{
+				return &EntityList[i];
+        }
+    }
+    return NULL;
 }
 
 int entity_ground_intersect_all(Entity_t *a)
@@ -196,6 +255,31 @@ int entity_intersect(Entity_t *a, Entity_t *b)
     return rect_intersect(aB,bB);
 }
 
+int entity_intersect_event(Entity_t *a, Entity_t *b)
+{
+	SDL_Rect aB, bB;
+
+	if((!a) && (!b))
+	{
+		return 0;
+	}
+
+	if(a->drawn == 0 || b->drawn == 0)
+	{
+		return 0;
+	}
+
+	aB = rect(a->position.x + a->bounds.x,
+			a->position.y + a->bounds.y,
+			a->bounds.w,
+			a->bounds.h);
+	bB = rect(b->position.x + b->EventBounds.x,
+        b->position.y + b->EventBounds.y,
+        b->EventBounds.w,
+        b->EventBounds.h);
+    return rect_intersect(aB,bB);
+}
+
 int entity_ground_intersect(Entity_t *a, Entity_t *b)/*First entity has to be the entity you want to ground check*/
 {
 	SDL_Rect aB, bB;
@@ -234,9 +318,31 @@ void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX,
     dest.w = entity->sprite->frameW;
     dest.h = entity->sprite->frameH;
 
+	entity->bounds.w = entity->sprite->frameW;
+    entity->bounds.h = entity->sprite->frameH;
+	entity->bounds.x = 0;
+	entity->bounds.y = 0;
+
 	entity->drawn = 1;
 
 	SDL_RenderCopy(renderer, entity->sprite->image, &src, &dest);
+}
+
+Entity_t *duplicEntity(Entity_t *a)
+{
+	int i;
+
+	for(i = 0; i<NumEntity; i++)
+	{
+	  if(!EntityList[i].sprite->filename)
+	  {
+		  EntityList[i] = *a;
+		  break;
+	  }
+	}
+
+
+	return &EntityList[i];
 }
 
 /*
