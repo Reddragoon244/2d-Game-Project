@@ -47,11 +47,6 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].origin.x = EntityList[i].sprite->frameW/2;
   EntityList[i].origin.y = EntityList[i].sprite->frameH/2;
 
-  //EntityList[i].bounds.w = EntityList[i].sprite->frameW;
-  //EntityList[i].bounds.h = EntityList[i].sprite->frameH;
-  //EntityList[i].bounds.x = 0;
-  //EntityList[i].bounds.y = 0;
-
   EntityList[i].groundBounds.w = EntityList[i].sprite->frameW - 2;
   EntityList[i].groundBounds.h = 5;
   EntityList[i].groundBounds.x = 1;
@@ -73,6 +68,7 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].PositionTemp.y = 0;
 
   EntityList[i].drawn = 0;
+  EntityList[i].dontColl = 0;
 
   EntityList[i].health = health;
   EntityList[i].healthMax = healthMax;
@@ -141,6 +137,10 @@ int entity_intersect_all(Entity_t *a)
         {
             continue;
         }
+		if(EntityList[i].dontColl == 1)
+		{
+			return 0;
+		}
         if (a == &EntityList[i])
         {
             /*don't clip self*/

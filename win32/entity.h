@@ -13,6 +13,7 @@
 
 static const Uint32 entityMax = 1000;
 
+
 typedef struct Entity_S
 {
 	int inuse;						/**<flag for tracking resource use*/
@@ -20,6 +21,7 @@ typedef struct Entity_S
 	int frame;
 	int cameraEnt;
 	int drawn;
+	int dontColl;
 	Vector2d position;
 	Vector2d velocity;
 	Vector2d origin;

@@ -32,14 +32,14 @@ void moveLeft(SDL_Rect &r, SDL_Rect &t, float deltaTime, Entity_t *a, int moveSp
 	}
 }
 
-void Jump(SDL_Rect &r, SDL_Rect &t, float deltaTime, Entity_t *a, int moveSpeed)
+void Jump(SDL_Rect &r, SDL_Rect &t, float deltaTime, Entity_t *a, int moveSpeed, int jumpMax)
 {
 	if(entity_intersect_all(a))
 	{
 		/*Collision with anything*/
 		r.y = t.y;
 	}
-	else
+	else if(r.y >= jumpMax)
 	{
 		/*Not Colliding*/
 		t.y = r.y;
@@ -62,7 +62,6 @@ void Fall(SDL_Rect &r, SDL_Rect &t, float deltaTime, Entity_t *a, int moveSpeed)
 		/*Not Colliding*/
 		t.y = r.y;
 														
-			if(r.y < 656)
-				r.y += 1 * deltaTime;				
+		r.y += moveSpeed * deltaTime;				
 	}
 }

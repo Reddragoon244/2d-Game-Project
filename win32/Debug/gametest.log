@@ -1,19 +1,32 @@
-﻿Build started 3/16/2016 7:23:49 PM.
-     1>Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 3/17/2016 12:43:30 AM.
+     1>Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\gametest.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Debug\gametest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt entity.c game.c
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Animation.c camera.c entity.c game.c items.c level.c physics.c sprite.c vector.c
+         vector.c
+         sprite.c
+         physics.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(15): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(31): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(47): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(65): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+         level.c
+         items.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\items.c(8): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\items.c(14): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
          game.c
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(105): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(114): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(152): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(161): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
          entity.c
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(47): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(48): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(77): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(78): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(127): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(127): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(73): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(74): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(123): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(123): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(250): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(250): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(254): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
@@ -28,6 +41,13 @@
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(304): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(316): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(317): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+         camera.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\camera.c(10): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\camera.c(11): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\camera.c(16): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\camera.c(17): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Animation.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\animation.c(32): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          Generating Code...
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\Animation.obj
@@ -39,15 +59,14 @@
          Debug\physics.obj
          Debug\sprite.obj
          Debug\vector.obj
-         LINK : ./gametest.exe not found or not built by the last incremental link; performing full link
          gametest.vcxproj -> C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\./gametest.exe
        Manifest:
          c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"./gametest.exe;#1" /manifest Debug\gametest.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\gametest.unsuccessfulbuild".
          Touching "Debug\gametest.lastbuildstate".
-     1>Done Building Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.33
+Time Elapsed 00:00:03.44

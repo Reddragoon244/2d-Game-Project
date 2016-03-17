@@ -19,6 +19,16 @@ Level *backg[levelMax];
 
 int transCheck = 0;
 int LeverFrame[entityMax];
+int leverorder[5] = {0, 0, 0, 0, 0};
+
+int i = 0;
+float frameTime = 0;
+float deltaTime = 0, slowTime = 0, slowTimeInit = 500;
+int jumpCheck = 1;
+int jump = 0;
+int jumpMax = 0;
+int groundCheck = 1;
+int actionCheck = 1;
 
 void loadEntities();
 void InitPos();
@@ -27,26 +37,17 @@ void puzzleLeveltwo(int width);
 void puzzleLevelthree(int width);
 void puzzleLevelfour(int width);
 void bothWorlds();
-int puzzleoneInfo(int order[]);
+int puzzleoneInfo();
 
 
 int main(int argc, char *argv[])
 {
 	SDL_Window *window = NULL;//always make a pointer null at initial
-	int leverorder[5] = {0, 0, 0, 0, 0};
 	int playerframe = 0;//playerframe is the frame of the player sprite sheet
 	int isRunning = 1;
 	const Uint8 *keys;
 	SDL_Event ev;
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
-	float frameTime = 0;
-	float deltaTime = 0, slowTime = 0, slowTimeInit = 500;
-	int jumpCheck = 1;
-	int jump = 0;
-	int jumpMax = 200;
-	int groundCheck = 1;
-	int leverFrame = 0;
-	int boxGrab = 0;
 
 		window = SDL_CreateWindow("Into the Twilight", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_SHOWN);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);	
@@ -72,28 +73,74 @@ int main(int argc, char *argv[])
 
 				keys = SDL_GetKeyboardState(NULL);
 
-//////////////////////////////////////*Action*///////////////////////////////////////////
-				if(keys[SDL_SCANCODE_RETURN])
+/////////////////////////////////////*Death*/////////////////////////////////////////////
+				if(entity_return_intersect_all(entitylist[0]) == entitylist[32])
 				{
+					InitPos();
+				}
+
+//////////////////////////////////////*Action*///////////////////////////////////////////
+				if(keys[SDL_SCANCODE_RETURN] && actionCheck == 1)
+				{
+
 
 					if(entity_return_intersect_all(entitylist[0]) == entitylist[33])
 					{
 							LeverFrame[0] = 1;
-							leverorder[0] = 1;
+							leverorder[i] = 1;
+							i++;
 					}
 
 					if(entity_return_intersect_all(entitylist[0]) == entitylist[34])
 					{
 							LeverFrame[1] = 1;
-							leverorder[1] = 2;
+							leverorder[i] = 2;
+							i++;
 					}
 
 					if(entity_return_intersect_all(entitylist[0]) == entitylist[35])
 					{
 							LeverFrame[2] = 1;
-							leverorder[2] = 3;
+							leverorder[i] = 3;
+							i++;
 					}
 
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[36])
+					{
+							LeverFrame[3] = 1;
+							leverorder[i] = 4;
+							i++;
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[37])
+					{
+							LeverFrame[4] = 1;
+							leverorder[i] = 5;
+							i++;
+					}
+			
+					actionCheck = 0;
+
+					if(puzzleoneInfo() && i == 5)
+					{
+						entitylist[11]->health = 0;
+						entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720);
+					}
+					else if(i == 5)
+					{
+						LeverFrame[0] = 0;
+						LeverFrame[1] = 0;
+						LeverFrame[2] = 0;
+						LeverFrame[3] = 0;
+						LeverFrame[4] = 0;
+						i = 0;
+					}
+
+				}
+
+				if(!keys[SDL_SCANCODE_RETURN])
+				{
+					actionCheck = 1;
 				}
 
 //////////////////////////////////*Move Right*//////////////////////////////////////////
@@ -119,11 +166,11 @@ int main(int argc, char *argv[])
 
 				if(keys[SDL_SCANCODE_SPACE] && jumpCheck == 1)
 				{
+					Jump(entitylist[0]->PositionRect, entitylist[0]->PositionTemp, deltaTime, entitylist[0], 1, jumpMax);
+						frameTime += deltaTime;
 
-					Jump(entitylist[0]->PositionRect, entitylist[0]->PositionTemp, deltaTime, entitylist[0], 1);
-							frameTime += deltaTime;
-						
-
+						if(jumpMax == entitylist[0]->PositionRect.y)
+							jumpCheck = 0;
 				}
 //////////////////////////////////*Falling*//////////////////////////////////////////////
 				else 
@@ -136,8 +183,11 @@ int main(int argc, char *argv[])
 						Fall(entitylist[0]->PositionRect, entitylist[0]->PositionTemp, deltaTime, entitylist[0], 1);
 							frameTime += deltaTime;
 
-						if(keys[SDL_SCANCODE_SPACE])
+						if(entity_ground_intersect_all(entitylist[0]))
+						{
+							jumpMax = entitylist[0]->PositionRect.y - 300;
 							jumpCheck = 1;
+						}
 					}
 					
 				}
@@ -166,12 +216,6 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				if(puzzleoneInfo(leverorder))
-				{
-					entitylist[11]->health = 0;
-					entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720);
-				}
-
 				Camera.x = entitylist[0]->PositionRect.x - 540;
 
 				camera_live_set(Camera);
@@ -192,8 +236,16 @@ int main(int argc, char *argv[])
 					else
 						slowTime++;
 				}
+				else
+					entitylist[32]->frame = 0;
+
 				/*LEVEL*/
 				puzzleLevelone(0);/*Puzzle One*/
+
+				/*Floor*/
+				entity_draw(entitylist[38], 0, renderer, 0, 720, Camera);
+				entity_draw(entitylist[39], 0, renderer, 1080, 720, Camera);
+				entity_draw(entitylist[40], 0, renderer, 2160, 720, Camera);
 
 				/*Player*/entity_draw(entitylist[0], playerframe, renderer, entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, Camera);/*Call the draw to draw the sprite to the screen*/
 
@@ -269,27 +321,40 @@ void loadEntities()
 		entitylist[23] = entity_load(spritelist[10], 1, 1);/*Box*/
 		entitylist[24] = entity_load(spritelist[10], 1, 1);/*Box*/
 		entitylist[25] = entity_load(spritelist[10], 1, 1);/*Box*/
-		entitylist[26] = entity_load(spritelist[12], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[27] = entity_load(spritelist[13], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[28] = entity_load(spritelist[14], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[29] = entity_load(spritelist[15], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[30] = entity_load(spritelist[16], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[31] = entity_load(spritelist[17], 1, 1);/*Function to load the sprite into the entitylist */
-		entitylist[32] = entity_load(spritelist[18], 1, 1);/*Function to load the sprite into the entitylist */
+		entitylist[26] = entity_load(spritelist[12], 1, 1);/*Platform Brick One*/
+		entitylist[27] = entity_load(spritelist[13], 1, 1);/*Platform Brick Two*/
+		entitylist[28] = entity_load(spritelist[14], 1, 1);/*Platform Brick Three*/
+		entitylist[29] = entity_load(spritelist[15], 1, 1);/*Platform Brick Four*/
+		entitylist[30] = entity_load(spritelist[16], 1, 1);/*Platform Brick Five*/
+		entitylist[31] = entity_load(spritelist[17], 1, 1);/*Hplatform450 for Door*/
+		entitylist[32] = entity_load(spritelist[18], 1, 1);/*enemy3*/
 		entitylist[33] = entity_load(spritelist[9], 1, 1);/*Lever1*/
 		entitylist[34] = entity_load(spritelist[9], 1, 1);/*Lever2*/
 		entitylist[35] = entity_load(spritelist[9], 1, 1);/*Lever3*/
 		entitylist[36] = entity_load(spritelist[9], 1, 1);/*Lever4*/
 		entitylist[37] = entity_load(spritelist[9], 1, 1);/*Lever5*/
+		entitylist[38] = entity_load(spritelist[1], 1, 1);/*Platform Floor*/
+		entitylist[39] = entity_load(spritelist[1], 1, 1);/*Platform Floor*/
+		entitylist[40] = entity_load(spritelist[1], 1, 1);/*Platform Floor*/
 
 }
 
 void InitPos()
 {
-	entitylist[0]->PositionRect.x = 0;
-	entitylist[0]->PositionRect.y = 656;
-	entitylist[0]->PositionTemp.x = 0;
-	entitylist[0]->PositionTemp.y = 656;
+	transCheck = 0;
+	i = 0;
+	frameTime = 0;
+	deltaTime = 0, slowTime = 0, slowTimeInit = 500;
+	jumpCheck = 1;
+	jump = 0;
+	jumpMax = 0;
+	groundCheck = 1;
+	actionCheck = 1;
+
+	entitylist[0]->PositionRect.x = 40;
+	entitylist[0]->PositionRect.y = 506;
+	entitylist[0]->PositionTemp.x = 40;
+	entitylist[0]->PositionTemp.y = 506;
 
 	entitylist[23]->PositionRect.x = 96;
 	entitylist[23]->PositionRect.y = 76;
@@ -308,6 +373,14 @@ void InitPos()
 	LeverFrame[0] = 0;
 	LeverFrame[1] = 0;
 	LeverFrame[2] = 0;
+	LeverFrame[3] = 0;
+	LeverFrame[4] = 0;
+
+	entitylist[33]->dontColl = 1;
+	entitylist[34]->dontColl = 1;
+	entitylist[35]->dontColl = 1;
+	entitylist[36]->dontColl = 1;
+	entitylist[37]->dontColl = 1;
 
 }
 
@@ -315,7 +388,7 @@ void puzzleLevelone(int width)
 {
 	if(transCheck == 0)/*Real World Platforms*/
 	{
-		levelDraw(backg[0], renderer, Camera);
+		levelDraw(backg[0], renderer, Camera);/*Real World Background*/
 		entity_draw(entitylist[28], 0, renderer, 32+width, 316, Camera);
 		entity_draw(entitylist[26], 0, renderer, 400+width, 108, Camera);
 		entity_draw(entitylist[27], 0, renderer, 708+width, 316, Camera);
@@ -327,24 +400,33 @@ void puzzleLevelone(int width)
 		entitylist[30]->drawn = 0;
 		entitylist[29]->drawn = 0;
 		entitylist[32]->drawn = 0;
+		entitylist[36]->drawn = 0;
+		entitylist[37]->drawn = 0;
+
 	}
 	else/*Twilight Realms Platforms*/
 	{
-		levelDraw(backg[1], renderer, Camera);
+		levelDraw(backg[1], renderer, Camera);/*Twilight World Background*/
 		entity_draw(entitylist[30], 0, renderer, 32+width, 524, Camera);
 		entity_draw(entitylist[29], 0, renderer, 370+width, 316, Camera);
+		entity_draw(entitylist[37], LeverFrame[4], renderer, 76+width, 494, Camera);
+		entity_draw(entitylist[36], LeverFrame[3], renderer, 500+width, 286, Camera);
 		entity_draw(entitylist[32], entitylist[32]->frame, renderer, entitylist[32]->PositionRect.x, entitylist[32]->PositionRect.y, Camera);/*Monster*/
 
 		/*Not Drawn*/
 		entitylist[28]->drawn = 0;
 		entitylist[26]->drawn = 0;
 		entitylist[27]->drawn = 0;
+		entitylist[33]->drawn = 0;
+		entitylist[34]->drawn = 0;
+		entitylist[35]->drawn = 0;
 
 	}
 
 
 	/*Both Worlds*/
 	entity_draw(entitylist[31], 0, renderer, 1048+width, 0, Camera);
+	entity_draw(entitylist[4], 0, renderer, 0+width, 0, Camera);
 	entity_draw(entitylist[11], 0, renderer, 1048+width, entitylist[11]->PositionRect.y, Camera);
 }
 
@@ -368,11 +450,11 @@ void bothWorlds()
 
 }
 
-int puzzleoneInfo (int order[])
+int puzzleoneInfo ()
 {
 	int leverOrder[5] = {1, 2, 3, 4, 5};
 
-	if(leverOrder == order)
+	if(leverOrder[0] == leverorder[0] && leverOrder[1] == leverorder[1] && leverOrder[2] == leverorder[2] && leverOrder[3] == leverorder[3] && leverOrder[4] == leverorder[4])
 	{
 		return 1;
 	}

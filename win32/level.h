@@ -3,7 +3,7 @@
 
 #include<SDL.h>
 #include<SDL_image.h>
-#include "sprite.h"
+#include "entity.h"
 #include "vector.h"
 
 static const Uint32 levelMax = 1000;

@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include "vector.h"
-#include "level.h"
 
 static SDL_Rect Camera = {0, 0, 1080, 720};
 
