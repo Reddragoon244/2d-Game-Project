@@ -47,6 +47,11 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].origin.x = EntityList[i].sprite->frameW/2;
   EntityList[i].origin.y = EntityList[i].sprite->frameH/2;
 
+  EntityList[i].bounds.w = EntityList[i].sprite->frameW;
+  EntityList[i].bounds.h = EntityList[i].sprite->frameH;
+  EntityList[i].bounds.x = 0;
+  EntityList[i].bounds.y = 0;
+
   EntityList[i].groundBounds.w = EntityList[i].sprite->frameW - 2;
   EntityList[i].groundBounds.h = 5;
   EntityList[i].groundBounds.x = 1;
@@ -72,8 +77,6 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
 
   EntityList[i].health = health;
   EntityList[i].healthMax = healthMax;
-
-  EntityList[i].think;
 
   EntityList[i].state = 0;/* initialize the state to 0 */
   EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this sprite is used*/
@@ -317,11 +320,6 @@ void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX,
 	entity->position.y = dest.y = drawY - Camera.y;
     dest.w = entity->sprite->frameW;
     dest.h = entity->sprite->frameH;
-
-	entity->bounds.w = entity->sprite->frameW;
-    entity->bounds.h = entity->sprite->frameH;
-	entity->bounds.x = 0;
-	entity->bounds.y = 0;
 
 	entity->drawn = 1;
 

@@ -9,7 +9,7 @@ typedef struct{
 
 }Animation;
 
-int sprite_animation(int frameMax, int startFrame, int FrameSpeed, float &frameTime);
+void sprite_animation(int frameMax, int startFrame, int FrameSpeed, float &frameTime, int &frame);
 float time_animation();
 
 #endif

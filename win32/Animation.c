@@ -4,10 +4,8 @@ Animation animation;
 
 	int currentTime = 0;
 	int previousTime = 0;
-	int frame = 0;
-	int slowTimeInit = 500;
 	
-int sprite_animation(int frameMax, int startFrame, int FrameSpeed, float &frameTime)
+void sprite_animation(int frameMax, int startFrame, int FrameSpeed, float &frameTime, int &frame)
 {
 	if(frameTime >= FrameSpeed)
 	{
@@ -22,7 +20,6 @@ int sprite_animation(int frameMax, int startFrame, int FrameSpeed, float &frameT
 		frameTime = 0;
 	}
 
-	return frame;
 }
 
 float time_animation()
