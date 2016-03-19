@@ -45,6 +45,7 @@ void bothWorlds();
 int puzzleoneInfo();
 void monsterInfo();
 void monsterInfo2();
+void leverAction();
 
 
 int main(int argc, char *argv[])
@@ -95,60 +96,7 @@ int main(int argc, char *argv[])
 //////////////////////////////////////*Action*///////////////////////////////////////////
 				if(keys[SDL_SCANCODE_RETURN] && actionCheck == 1)
 				{
-
-
-					if(entity_return_intersect_all(entitylist[0]) == entitylist[33])
-					{
-							LeverFrame[0] = 1;
-							leverorder[i] = 1;
-							i++;
-					}
-
-					if(entity_return_intersect_all(entitylist[0]) == entitylist[34])
-					{
-							LeverFrame[1] = 1;
-							leverorder[i] = 2;
-							i++;
-					}
-
-					if(entity_return_intersect_all(entitylist[0]) == entitylist[35])
-					{
-							LeverFrame[2] = 1;
-							leverorder[i] = 3;
-							i++;
-					}
-
-					if(entity_return_intersect_all(entitylist[0]) == entitylist[36])
-					{
-							LeverFrame[3] = 1;
-							leverorder[i] = 4;
-							i++;
-					}
-
-					if(entity_return_intersect_all(entitylist[0]) == entitylist[37])
-					{
-							LeverFrame[4] = 1;
-							leverorder[i] = 5;
-							i++;
-					}
-			
-					actionCheck = 0;
-
-					if(puzzleoneInfo() && i == 5)
-					{
-						entitylist[11]->health = 0;
-						entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720);
-					}
-					else if(i == 5)
-					{
-						LeverFrame[0] = 0;
-						LeverFrame[1] = 0;
-						LeverFrame[2] = 0;
-						LeverFrame[3] = 0;
-						LeverFrame[4] = 0;
-						i = 0;
-					}
-
+					leverAction();	
 				}
 
 				if(!keys[SDL_SCANCODE_RETURN])
@@ -229,7 +177,19 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				Camera.x = entitylist[0]->PositionRect.x - 540;
+				/*Doors*/
+				entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720, 450);
+				entitylist[12]->PositionRect.y = doorThink(entitylist[12], 720, 482);
+				entitylist[13]->PositionRect.y = doorThink(entitylist[13], 720, 482);
+				entitylist[14]->PositionRect.y = doorThink(entitylist[14], 720, 482);
+				entitylist[15]->PositionRect.y = doorThink(entitylist[15], 720, 482);
+
+				if(Camera.x == 2160)
+				{
+
+				}
+				else
+					Camera.x = entitylist[0]->PositionRect.x - 540;
 
 				camera_live_set(Camera);
 
@@ -293,6 +253,7 @@ void loadEntities()
 		spritelist[18] = sprite_load("enemy3.bmp", 8, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
 		spritelist[19] = sprite_load("Hbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
 		spritelist[20] = sprite_load("Vbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[21] = sprite_load("spikes.bmp", 1, 1, renderer);/*Platform Sprite Load*/
 
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Player*/
@@ -373,6 +334,11 @@ void InitPos()
 	entitylist[13]->PositionRect.y = 482;
 	entitylist[14]->PositionRect.y = 482;
 	entitylist[15]->PositionRect.y = 482;
+	entitylist[11]->health = 1;
+	entitylist[12]->health = 1;
+	entitylist[13]->health = 1;
+	entitylist[14]->health = 1;
+	entitylist[15]->health = 1;
 	/*Monster Puzzle One Init*/
 	entitylist[32]->PositionRect.x = 638;
 	entitylist[32]->PositionRect.y = 253;
@@ -388,18 +354,35 @@ void InitPos()
 	entitylist[8]->PositionRect.y = 292;
 	entitylist[7]->frame = 0;
 	entitylist[8]->frame = 0;
+
 	/*Lever Puzzle One Init*/
 	LeverFrame[0] = 0;
 	LeverFrame[1] = 0;
 	LeverFrame[2] = 0;
 	LeverFrame[3] = 0;
 	LeverFrame[4] = 0;
-	/*Lever Don't Collide Init*/
+	/*Lever Puzzle Two Init*/
+	LeverFrame[5] = 0;
+	LeverFrame[6] = 0;
+	LeverFrame[7] = 0;
+	LeverFrame[8] = 0;
+	LeverFrame[9] = 0;
+	LeverFrame[10] = 0;
+
+	/*Lever Don't Collide 1 Init*/
 	entitylist[33]->dontColl = 1;
 	entitylist[34]->dontColl = 1;
 	entitylist[35]->dontColl = 1;
 	entitylist[36]->dontColl = 1;
 	entitylist[37]->dontColl = 1;
+
+	/*Lever Don't Collide 2 Init*/
+	entitylist[17]->dontColl = 1;
+	entitylist[18]->dontColl = 1;
+	entitylist[19]->dontColl = 1;
+	entitylist[20]->dontColl = 1;
+	entitylist[21]->dontColl = 1;
+	entitylist[22]->dontColl = 1;
 
 }
 
@@ -455,8 +438,11 @@ void puzzleLeveltwo(int width)
 		if(transCheck == 0)/*Real World Platforms*/
 	{
 		entity_draw(entitylist[47], 0, renderer, 96+width, 116, Camera);
+		entity_draw(entitylist[17], LeverFrame[5], renderer, 156+width, 84, Camera);
 		entity_draw(entitylist[48], 0, renderer, 405+width, 324, Camera);
+		entity_draw(entitylist[18], LeverFrame[6], renderer, 466+width, 292, Camera);
 		entity_draw(entitylist[49], 0, renderer, 714+width, 116, Camera);
+		entity_draw(entitylist[19], LeverFrame[7], renderer, 776+width, 84, Camera);
 
 		/*Not Drawn*/
 		entitylist[44]->drawn = 0;
@@ -464,13 +450,19 @@ void puzzleLeveltwo(int width)
 		entitylist[46]->drawn = 0;
 		entitylist[7]->drawn = 0;
 		entitylist[8]->drawn = 0;
-
+		entitylist[20]->drawn = 0;
+		entitylist[21]->drawn = 0;
+		entitylist[22]->drawn = 0;
 	}
 	else/*Twilight Realms Platforms*/
 	{
 		entity_draw(entitylist[44], 0, renderer, 96+width, 324, Camera);
+		entity_draw(entitylist[20], LeverFrame[8], renderer, 156+width, 292, Camera);
 		entity_draw(entitylist[45], 0, renderer, 405+width, 116, Camera);
+		entity_draw(entitylist[21], LeverFrame[9], renderer, 466+width, 84, Camera);
 		entity_draw(entitylist[46], 0, renderer, 714+width, 324, Camera);
+		entity_draw(entitylist[22], LeverFrame[10], renderer, 776+width, 292, Camera);
+
 		entity_draw(entitylist[7], entitylist[7]->frame, renderer, entitylist[7]->PositionRect.x+width, entitylist[7]->PositionRect.y, Camera);
 		entity_draw(entitylist[8], entitylist[8]->frame, renderer, entitylist[8]->PositionRect.x+width, entitylist[8]->PositionRect.y, Camera);
 
@@ -478,6 +470,9 @@ void puzzleLeveltwo(int width)
 		entitylist[47]->drawn = 0;
 		entitylist[48]->drawn = 0;
 		entitylist[49]->drawn = 0;
+		entitylist[17]->drawn = 0;
+		entitylist[18]->drawn = 0;
+		entitylist[19]->drawn = 0;
 
 	}
 
@@ -523,6 +518,12 @@ void monsterInfo()
 {
 
 	/*Monster*/
+
+			if(slowTime <= 75)
+				entitylist[7]->frame = 8;
+			else
+				entitylist[7]->frame = 0;
+				 
 
 			if(moveright == 1)
 			{
@@ -578,11 +579,14 @@ void monsterInfo2()
 
 				if(slowTime2 == 150)
 				{
-					entitylist[8]->PositionRect.x += 5;
+					entitylist[8]->PositionRect.x += 3;
 					slowTime2 = 0;
 				}
 
-				if(entitylist[8]->PositionRect.x >= 914)
+				if(entitylist[8]->PositionRect.x <= 358 && entitylist[8]->PositionRect.x >= 350)
+					entitylist[8]->PositionRect.x += 365;
+
+				if(entitylist[8]->PositionRect.x >= 954)
 				{
 					moveright2 = 0;
 					moveleft2 = 1;
@@ -595,11 +599,14 @@ void monsterInfo2()
 
 				if(slowTime2 == 150)
 				{
-					entitylist[8]->PositionRect.x -= 5;
+					entitylist[8]->PositionRect.x -= 3;
 					slowTime2 = 0;
 				}
 
-				if(entitylist[8]->PositionRect.x <= 714)
+				if(entitylist[8]->PositionRect.x <= 715 && entitylist[8]->PositionRect.x >= 708)
+					entitylist[8]->PositionRect.x -= 365;
+
+				if(entitylist[8]->PositionRect.x <= 96)
 				{
 					moveleft2 = 0;
 					moveright2 = 1;
@@ -609,5 +616,154 @@ void monsterInfo2()
 }
 
 
+void leverAction()
+{
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[33])
+					{
+							LeverFrame[0] = 1;
+							leverorder[i] = 1;
+							i++;
+					}
 
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[34])
+					{
+							LeverFrame[1] = 1;
+							leverorder[i] = 2;
+							i++;
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[35])
+					{
+							LeverFrame[2] = 1;
+							leverorder[i] = 3;
+							i++;
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[36])
+					{
+							LeverFrame[3] = 1;
+							leverorder[i] = 4;
+							i++;
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[37])
+					{
+							LeverFrame[4] = 1;
+							leverorder[i] = 5;
+							i++;
+					}
+			
+					actionCheck = 0;
+
+					if(puzzleoneInfo() && i == 5)
+						entitylist[11]->health = 0;
+					else if(i == 5)
+					{
+						LeverFrame[0] = 0;
+						LeverFrame[1] = 0;
+						LeverFrame[2] = 0;
+						LeverFrame[3] = 0;
+						LeverFrame[4] = 0;
+						i = 0;
+					}
+
+
+
+					/*Lever Puzzle Two*/
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[17])
+					{
+							if(LeverFrame[5] == 1)
+							{
+								LeverFrame[5] = 0;
+								entitylist[12]->health = 1;
+								entitylist[14]->health = 1;
+							}
+							else
+							{
+								LeverFrame[5] = 1;
+								entitylist[12]->health = 0;
+								entitylist[14]->health = 0;
+							}
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[18])
+					{
+						  if(LeverFrame[6] == 1)
+							{
+								LeverFrame[6] = 0;
+								entitylist[13]->health = 1;
+								entitylist[15]->health = 0;
+							}
+						  else
+						  {
+							LeverFrame[6] = 1;
+								entitylist[13]->health = 0;
+								entitylist[15]->health = 1;
+						  }
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[19])
+					{
+						if(LeverFrame[7] == 1)
+							{
+								LeverFrame[7] = 0;
+								entitylist[13]->health = 1;
+								entitylist[15]->health = 0;
+							}
+						else
+						{
+							LeverFrame[7] = 1;
+								entitylist[14]->health = 0;
+								entitylist[13]->health = 1;
+						}
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[20])
+					{		
+						if(LeverFrame[8] == 1)
+							{
+								LeverFrame[8] = 0;
+								entitylist[13]->health = 1;
+								entitylist[14]->health = 0;
+							}
+						else
+						{
+							LeverFrame[8] = 1;
+								entitylist[13]->health = 0;
+								entitylist[14]->health = 1;
+						}
+					}
+
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[21])
+					{
+						if(LeverFrame[9] == 1)
+							{
+								LeverFrame[9] = 0;
+								entitylist[15]->health = 1;
+								entitylist[12]->health = 0;
+							}
+						else
+						{
+							LeverFrame[9] = 1;
+								entitylist[15]->health = 0;
+								entitylist[12]->health = 1;
+						}
+					}
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[22])
+					{
+						if(LeverFrame[10] == 1)
+							{
+								LeverFrame[10] = 0;
+								entitylist[12]->health = 1;
+								entitylist[13]->health = 0;
+							}
+						else
+						{
+							LeverFrame[10] = 1;
+								entitylist[12]->health = 0;
+								entitylist[13]->health = 1;
+						}
+					}
+}
 

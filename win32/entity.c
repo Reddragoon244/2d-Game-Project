@@ -25,8 +25,7 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   /*makesure we have the room for a new entity*/
   if(NumEntity + 1 >= entityMax)
   {
-        fprintf(stderr, "Maximum Entities Reached.\n");
-        
+        fprintf(stderr, "Maximum Entities Reached.\n");     
   }
 
   /*if its not already in memory, then load it.*/
@@ -79,7 +78,7 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].healthMax = healthMax;
 
   EntityList[i].state = 0;/* initialize the state to 0 */
-  EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this sprite is used*/
+  EntityList[i].inuse++;/* inuse is used to keep a count of the number of times this entity is used*/
 
   return &EntityList[i];
 
@@ -140,17 +139,17 @@ int entity_intersect_all(Entity_t *a)
         {
             continue;
         }
-		if(EntityList[i].dontColl == 1)
-		{
-			return 0;
-		}
         if (a == &EntityList[i])
         {
             /*don't clip self*/
         }
 		else if(entity_intersect(a, &EntityList[i]))
 		{
-			printf("%s \n", EntityList[i].sprite->filename);
+					if(EntityList[i].dontColl == 1)
+					{
+						return 0;
+					}
+						printf("%s \n", EntityList[i].sprite->filename);
 				return 1;
         }
     }
@@ -316,10 +315,13 @@ void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX,
 	src.y = (frame/entity->sprite->fpl) * entity->sprite->frameH;//frame/sprite->fpl * sprite->frameH;
     src.w = entity->sprite->frameW;
     src.h = entity->sprite->frameH;
-    entity->position.x = dest.x = drawX - Camera.x;
-	entity->position.y = dest.y = drawY - Camera.y;
+    dest.x = drawX - Camera.x;
+	dest.y = drawY - Camera.y;
     dest.w = entity->sprite->frameW;
     dest.h = entity->sprite->frameH;
+
+	entity->PositionRect.x = entity->position.x = drawX;
+	entity->PositionRect.y = entity->position.y = drawY;
 
 	entity->drawn = 1;
 
