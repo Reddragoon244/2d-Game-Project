@@ -52,7 +52,7 @@ Entity_t *entity_load(Sprite *sprite, float health, float healthMax)
   EntityList[i].bounds.y = 0;
 
   EntityList[i].groundBounds.w = EntityList[i].sprite->frameW - 2;
-  EntityList[i].groundBounds.h = 5;
+  EntityList[i].groundBounds.h = 1;
   EntityList[i].groundBounds.x = 1;
   EntityList[i].groundBounds.y = EntityList[i].sprite->frameW;
 
@@ -226,6 +226,11 @@ int entity_ground_intersect_all(Entity_t *a)
         }
 		else if(entity_ground_intersect(a, &EntityList[i]))
 		{
+					if(EntityList[i].dontColl == 1)
+					{
+						return 0;
+					}
+
 				return 1;
         }
     }
@@ -320,8 +325,8 @@ void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX,
     dest.w = entity->sprite->frameW;
     dest.h = entity->sprite->frameH;
 
-	entity->PositionRect.x = entity->position.x = drawX;
-	entity->PositionRect.y = entity->position.y = drawY;
+	 entity->position.x = drawX;
+	 entity->position.y = drawY;
 
 	entity->drawn = 1;
 

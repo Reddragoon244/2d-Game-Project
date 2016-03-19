@@ -57,11 +57,11 @@ void Fall(SDL_Rect &r, SDL_Rect &t, float deltaTime, Entity_t *a, int moveSpeed)
 							
 
 	}
-	else if(!entity_ground_intersect_all(a))
+	else if(!entity_ground_intersect_all(a))	
 	{
 		/*Not Colliding*/
 		t.y = r.y;
-														
-		r.y += moveSpeed * deltaTime;				
+							
+			r.y += moveSpeed * deltaTime;				
 	}
 }

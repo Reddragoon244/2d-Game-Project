@@ -25,6 +25,7 @@ int moveright = 1, moveleft = 0;
 int moveright2 = 1, moveleft2 = 0;
 float slowTime = 0;
 float slowTime2 = 0;
+float slowTime3 = 0;
 
 int i = 0;
 float frameTime = 0;
@@ -44,7 +45,8 @@ void puzzleLevelfour(int width);
 void bothWorlds();
 int puzzleoneInfo();
 void monsterInfo();
-void monsterInfo2();
+void monsterInfo2(int width);
+void monsterInfo3(int width);
 void leverAction();
 
 
@@ -84,7 +86,10 @@ int main(int argc, char *argv[])
 /////////////////////////////////////*Death*/////////////////////////////////////////////
 				if(entity_return_intersect_all(entitylist[0]) == entitylist[32] || 
 					entity_return_intersect_all(entitylist[0]) == entitylist[7] || 
-					entity_return_intersect_all(entitylist[0]) == entitylist[8])
+					entity_return_intersect_all(entitylist[0]) == entitylist[8] ||
+					entity_return_intersect_all(entitylist[0]) == entitylist[50] ||
+					entity_return_intersect_all(entitylist[0]) == entitylist[51] ||
+					entity_return_intersect_all(entitylist[0]) == entitylist[58])
 				{
 					InitPos();
 				}
@@ -179,10 +184,12 @@ int main(int argc, char *argv[])
 
 				/*Doors*/
 				entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720, 450);
+				entitylist[16]->PositionRect.y = doorThink(entitylist[16], 720, 450);
 				entitylist[12]->PositionRect.y = doorThink(entitylist[12], 720, 482);
 				entitylist[13]->PositionRect.y = doorThink(entitylist[13], 720, 482);
 				entitylist[14]->PositionRect.y = doorThink(entitylist[14], 720, 482);
 				entitylist[15]->PositionRect.y = doorThink(entitylist[15], 720, 482);
+				entitylist[16]->PositionRect.y = doorThink(entitylist[16], 720, 450);
 
 				if(Camera.x == 2160)
 				{
@@ -192,18 +199,19 @@ int main(int argc, char *argv[])
 					Camera.x = entitylist[0]->PositionRect.x - 540;
 
 				camera_live_set(Camera);
+				
+				monsterInfo();
+				monsterInfo2(0);
+				monsterInfo3(0);
 
 				SDL_RenderClear(renderer);
 
-				monsterInfo();
-				monsterInfo2();
-
 				/*LEVEL*/
 				puzzleLevelone(1080);/*Puzzle One*/
-				puzzleLeveltwo(0);/*Puzzle Two*/
+				puzzleLeveltwo(2160);/*Puzzle Two*/
+				puzzleLevelthree(0);
 
-				/*Floor*/
-				entity_draw(entitylist[40], 0, renderer, 2160, 710, Camera);
+				//printf("(%i, %i), (%i, %i), (%i, %i) \n", entitylist[7]->PositionRect.x, entitylist[7]->PositionRect.y, entitylist[8]->PositionRect.x, entitylist[8]->PositionRect.y, entitylist[32]->PositionRect.x, entitylist[32]->PositionRect.y);
 
 				/*Player*/entity_draw(entitylist[0], playerframe, renderer, entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, Camera);/*Call the draw to draw the sprite to the screen*/
 
@@ -254,6 +262,7 @@ void loadEntities()
 		spritelist[19] = sprite_load("Hbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
 		spritelist[20] = sprite_load("Vbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
 		spritelist[21] = sprite_load("spikes.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[22] = sprite_load("enemy4.bmp", 8, 1, renderer);/*Platform Sprite Load*/
 
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Player*/
@@ -265,14 +274,14 @@ void loadEntities()
 		entitylist[6] = entity_load(spritelist[6], 1, 1);/*Vplatform270*/
 		entitylist[7] = entity_load(spritelist[7], 1, 1);/*enemy1 puzzletwo*/
 		entitylist[8] = entity_load(spritelist[8], 1, 1);/*enemy2 puzzletwo*/
-		entitylist[9] = entity_load(spritelist[9], 1, 1);/*Lever*/
+		entitylist[9] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
 		entitylist[10] = entity_load(spritelist[10], 1, 1);/*Box*/
 		entitylist[11] = entity_load(spritelist[11], 1, 1);/*Door puzzleone*/
 		entitylist[12] = entity_load(spritelist[11], 1, 1);/*Door puzzletwo*/
 		entitylist[13] = entity_load(spritelist[11], 1, 1);/*Door puzzletwo*/
 		entitylist[14] = entity_load(spritelist[11], 1, 1);/*Door puzzletwo*/
 		entitylist[15] = entity_load(spritelist[11], 1, 1);/*Door puzzletwo*/
-		entitylist[16] = entity_load(spritelist[11], 1, 1);/*Door*/
+		entitylist[16] = entity_load(spritelist[11], 1, 1);/*Door puzzlethree*/
 		entitylist[17] = entity_load(spritelist[9], 1, 1);/*Lever1 puzzletwo*/
 		entitylist[18] = entity_load(spritelist[9], 1, 1);/*Lever2 puzzletwo*/
 		entitylist[19] = entity_load(spritelist[9], 1, 1);/*Lever3 puzzletwo*/
@@ -296,7 +305,7 @@ void loadEntities()
 		entitylist[37] = entity_load(spritelist[9], 1, 1);/*Lever5 puzzleone*/
 		entitylist[38] = entity_load(spritelist[1], 1, 1);/*Platform Floor puzzleone*/
 		entitylist[39] = entity_load(spritelist[1], 1, 1);/*Platform Floor puzzletwo*/
-		entitylist[40] = entity_load(spritelist[1], 1, 1);/*Platform Floor*/
+		entitylist[40] = entity_load(spritelist[1], 1, 1);/*Platform Floor puzzlethree*/
 		entitylist[41] = entity_load(spritelist[17], 1, 1);/*Hplatform450 for Door puzzletwo*/
 		entitylist[42] = entity_load(spritelist[4], 1, 1);/*Vplatform1080*/
 		entitylist[43] = entity_load(spritelist[17], 1, 1);/*Hplatform450 for first puzzleone*/
@@ -306,6 +315,16 @@ void loadEntities()
 		entitylist[47] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzletwo 4*/
 		entitylist[48] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzletwo 5*/
 		entitylist[49] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzletwo 6*/
+		entitylist[50] = entity_load(spritelist[21], 1, 1);/*SPIKES*/
+		entitylist[51] = entity_load(spritelist[22], 1, 1);/*Spike Enemy*/
+		entitylist[52] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 1*/
+		entitylist[53] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 2*/
+		entitylist[54] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 3*/
+		entitylist[55] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 4*/
+		entitylist[56] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 5*/
+		entitylist[57] = entity_load(spritelist[20], 1, 1);/*Vbrick270 puzzlethree 6*/
+		entitylist[58] = entity_load(spritelist[22], 1, 1);/*Spike Enemy*/
+		entitylist[59] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
 
 }
 
@@ -321,24 +340,26 @@ void InitPos()
 	groundCheck = 1;
 	actionCheck = 1;
 	/*Player Init*/
-	entitylist[0]->PositionRect.x = 40;
-	entitylist[0]->PositionRect.y = 506;
-	entitylist[0]->PositionTemp.x = 40;
-	entitylist[0]->PositionTemp.y = 506;
+	entitylist[0]->PositionRect.x = 150;
+	entitylist[0]->PositionRect.y = 76;
+	entitylist[0]->PositionTemp.x = 150;
+	entitylist[0]->PositionTemp.y = 76;
 	/*Box Init*/
 	entitylist[23]->PositionRect.x = 96;
 	entitylist[23]->PositionRect.y = 76;
 	/*Door Init*/
 	entitylist[11]->PositionRect.y = 450;
+	entitylist[16]->PositionRect.y = 450;
 	entitylist[12]->PositionRect.y = 482;
 	entitylist[13]->PositionRect.y = 482;
 	entitylist[14]->PositionRect.y = 482;
 	entitylist[15]->PositionRect.y = 482;
-	entitylist[11]->health = 1;
-	entitylist[12]->health = 1;
-	entitylist[13]->health = 1;
-	entitylist[14]->health = 1;
-	entitylist[15]->health = 1;
+	entitylist[11]->health = 0;
+	entitylist[16]->health = 0;
+	entitylist[12]->health = 0;
+	entitylist[13]->health = 0;
+	entitylist[14]->health = 0;
+	entitylist[15]->health = 0;
 	/*Monster Puzzle One Init*/
 	entitylist[32]->PositionRect.x = 638;
 	entitylist[32]->PositionRect.y = 253;
@@ -347,6 +368,7 @@ void InitPos()
 	entitylist[32]->EventBounds.w = 240;
 	entitylist[32]->EventBounds.h = 240;
 	entitylist[32]->frame = 0;
+	entitylist[32]->dontColl = 1;
 	/*Monster 2 and 3*/
 	entitylist[7]->PositionRect.x = 405;
 	entitylist[7]->PositionRect.y = 84;
@@ -354,7 +376,22 @@ void InitPos()
 	entitylist[8]->PositionRect.y = 292;
 	entitylist[7]->frame = 0;
 	entitylist[8]->frame = 0;
+	entitylist[7]->dontColl = 1;
+	entitylist[8]->dontColl = 1;
+	/*Monster Puzzle Three Init*/
+	entitylist[51]->PositionRect.x = 540;
+	entitylist[51]->PositionRect.y = 678;
+	entitylist[51]->EventBounds.x = -120;
+	entitylist[51]->EventBounds.y = -120;
+	entitylist[51]->EventBounds.w = 240;
+	entitylist[51]->EventBounds.h = 240;
+	entitylist[51]->frame = 0;
+	entitylist[51]->dontColl = 1;
 
+	entitylist[58]->PositionRect.x = 540;
+	entitylist[58]->PositionRect.y = -578;
+	entitylist[58]->frame = 0;
+	entitylist[58]->dontColl = 1;
 	/*Lever Puzzle One Init*/
 	LeverFrame[0] = 0;
 	LeverFrame[1] = 0;
@@ -368,8 +405,15 @@ void InitPos()
 	LeverFrame[8] = 0;
 	LeverFrame[9] = 0;
 	LeverFrame[10] = 0;
+	LeverFrame[11] = 0;
+	LeverFrame[12] = 0;
+
+	/*Spikes don't Collide*/
+	entitylist[50]->dontColl = 1;
 
 	/*Lever Don't Collide 1 Init*/
+	entitylist[9]->dontColl = 1;
+	entitylist[59]->dontColl = 1;
 	entitylist[33]->dontColl = 1;
 	entitylist[34]->dontColl = 1;
 	entitylist[35]->dontColl = 1;
@@ -394,9 +438,9 @@ void puzzleLevelone(int width)
 		entity_draw(entitylist[28], 0, renderer, 32+width, 316, Camera);
 		entity_draw(entitylist[26], 0, renderer, 400+width, 108, Camera);
 		entity_draw(entitylist[27], 0, renderer, 708+width, 316, Camera);
-		entity_draw(entitylist[33], LeverFrame[0], renderer, 430+width, 78, Camera);
-		entity_draw(entitylist[34], LeverFrame[1], renderer, 738+width, 286, Camera);
-		entity_draw(entitylist[35], LeverFrame[2], renderer, 76+width, 286, Camera);
+		entity_draw(entitylist[33], LeverFrame[0], renderer, 430+width, 77, Camera);
+		entity_draw(entitylist[34], LeverFrame[1], renderer, 738+width, 285, Camera);
+		entity_draw(entitylist[35], LeverFrame[2], renderer, 76+width, 285, Camera);
 
 		/*Not Drawn*/
 		entitylist[30]->drawn = 0;
@@ -411,8 +455,8 @@ void puzzleLevelone(int width)
 		levelDraw(backg[1], renderer, Camera);/*Twilight World Background*/
 		entity_draw(entitylist[30], 0, renderer, 32+width, 524, Camera);
 		entity_draw(entitylist[29], 0, renderer, 370+width, 316, Camera);
-		entity_draw(entitylist[37], LeverFrame[4], renderer, 76+width, 494, Camera);
-		entity_draw(entitylist[36], LeverFrame[3], renderer, 500+width, 286, Camera);
+		entity_draw(entitylist[37], LeverFrame[4], renderer, 76+width, 493, Camera);
+		entity_draw(entitylist[36], LeverFrame[3], renderer, 500+width, 285, Camera);
 		entity_draw(entitylist[32], entitylist[32]->frame, renderer, entitylist[32]->PositionRect.x+width, entitylist[32]->PositionRect.y, Camera);/*Monster*/
 
 		/*Not Drawn*/
@@ -424,7 +468,6 @@ void puzzleLevelone(int width)
 		entitylist[35]->drawn = 0;
 
 	}
-
 
 	/*Both Worlds*/
 	entity_draw(entitylist[38], 0, renderer, 0+width, 710, Camera);/*Floor*/
@@ -438,11 +481,11 @@ void puzzleLeveltwo(int width)
 		if(transCheck == 0)/*Real World Platforms*/
 	{
 		entity_draw(entitylist[47], 0, renderer, 96+width, 116, Camera);
-		entity_draw(entitylist[17], LeverFrame[5], renderer, 156+width, 84, Camera);
+		entity_draw(entitylist[17], LeverFrame[5], renderer, 156+width, 83, Camera);
 		entity_draw(entitylist[48], 0, renderer, 405+width, 324, Camera);
-		entity_draw(entitylist[18], LeverFrame[6], renderer, 466+width, 292, Camera);
+		entity_draw(entitylist[18], LeverFrame[6], renderer, 466+width, 291, Camera);
 		entity_draw(entitylist[49], 0, renderer, 714+width, 116, Camera);
-		entity_draw(entitylist[19], LeverFrame[7], renderer, 776+width, 84, Camera);
+		entity_draw(entitylist[19], LeverFrame[7], renderer, 776+width, 83, Camera);
 
 		/*Not Drawn*/
 		entitylist[44]->drawn = 0;
@@ -457,11 +500,11 @@ void puzzleLeveltwo(int width)
 	else/*Twilight Realms Platforms*/
 	{
 		entity_draw(entitylist[44], 0, renderer, 96+width, 324, Camera);
-		entity_draw(entitylist[20], LeverFrame[8], renderer, 156+width, 292, Camera);
+		entity_draw(entitylist[20], LeverFrame[8], renderer, 156+width, 291, Camera);
 		entity_draw(entitylist[45], 0, renderer, 405+width, 116, Camera);
-		entity_draw(entitylist[21], LeverFrame[9], renderer, 466+width, 84, Camera);
+		entity_draw(entitylist[21], LeverFrame[9], renderer, 466+width, 83, Camera);
 		entity_draw(entitylist[46], 0, renderer, 714+width, 324, Camera);
-		entity_draw(entitylist[22], LeverFrame[10], renderer, 776+width, 292, Camera);
+		entity_draw(entitylist[22], LeverFrame[10], renderer, 776+width, 291, Camera);
 
 		entity_draw(entitylist[7], entitylist[7]->frame, renderer, entitylist[7]->PositionRect.x+width, entitylist[7]->PositionRect.y, Camera);
 		entity_draw(entitylist[8], entitylist[8]->frame, renderer, entitylist[8]->PositionRect.x+width, entitylist[8]->PositionRect.y, Camera);
@@ -480,7 +523,7 @@ void puzzleLeveltwo(int width)
 	entity_draw(entitylist[2], 0, renderer, 542+width, 450, Camera);/*Platform Door Holder*/
 	entity_draw(entitylist[39], 0, renderer, 0+width, 710, Camera);/*Floor*/
 	entity_draw(entitylist[31], 0, renderer, 1048+width, 0, Camera);/*Right Side*/
-	entity_draw(entitylist[4], 0, renderer, 0+width, 0, Camera);/*Left Side*/
+	entity_draw(entitylist[31], 0, renderer, 0+width, 0, Camera);/*Left Side*/
 	entity_draw(entitylist[12], 0, renderer, 542+width, entitylist[12]->PositionRect.y, Camera);/*Door One*/
 	entity_draw(entitylist[13], 0, renderer, 692+width, entitylist[13]->PositionRect.y, Camera);/*Door Two*/
 	entity_draw(entitylist[14], 0, renderer, 842+width, entitylist[14]->PositionRect.y, Camera);/*Door Three*/
@@ -489,7 +532,48 @@ void puzzleLeveltwo(int width)
 
 void puzzleLevelthree(int width)
 {
+		if(transCheck == 0)/*Real World Platforms*/
+	{
+		entity_draw(entitylist[52], 0, renderer, 156+width, 150, Camera);
+		entity_draw(entitylist[55], 0, renderer, 156+width, 550, Camera);
+		entity_draw(entitylist[56], 0, renderer, 650+width, 150, Camera);
+		entity_draw(entitylist[59], LeverFrame[12], renderer, 796+width, 678, Camera);
 
+		if(LeverFrame[11] == 0)
+			entity_draw(entitylist[51], entitylist[51]->frame, renderer, entitylist[51]->PositionRect.x+width, entitylist[51]->PositionRect.y, Camera);
+
+		/*Not Drawn*/
+		entitylist[58]->drawn = 0;
+		entitylist[53]->drawn = 0;
+		entitylist[54]->drawn = 0;
+		entitylist[57]->drawn = 0;
+		entitylist[9]->drawn = 0;
+
+	}
+	else/*Twilight Realms Platforms*/
+	{
+
+		entity_draw(entitylist[53], 0, renderer, 686+width, 550, Camera);
+		entity_draw(entitylist[54], 0, renderer, 386+width, 350, Camera);
+		entity_draw(entitylist[57], 0, renderer, 650+width, 150, Camera);
+		entity_draw(entitylist[9], LeverFrame[11], renderer, 796+width, 117, Camera);
+
+		if(LeverFrame[11] == 0)
+			entity_draw(entitylist[58], entitylist[58]->frame, renderer, entitylist[58]->PositionRect.x+width, entitylist[58]->PositionRect.y, Camera);
+
+		/*Not Drawn*/
+		entitylist[52]->drawn = 0;
+		entitylist[55]->drawn = 0;
+		entitylist[56]->drawn = 0;
+		entitylist[51]->drawn = 0;
+
+	}
+
+	/*Both Worlds*/
+	entity_draw(entitylist[40], 0, renderer, 0+width, 710, Camera);/*Floor*/
+	entity_draw(entitylist[41], 0, renderer, 1048+width, 0, Camera);/*Right Side Platform 450*/
+	entity_draw(entitylist[4], 0, renderer, 0+width, 0, Camera);/*Left Side*/
+	entity_draw(entitylist[16], 0, renderer, 1048+width, entitylist[16]->PositionRect.y, Camera);/*Door*/
 }
 
 void puzzleLevelfour(int width)
@@ -518,6 +602,19 @@ void monsterInfo()
 {
 
 	/*Monster*/
+			if(entity_intersect_event_all(entitylist[0]))
+			{
+				/*Monster Animation*/
+ 				sprite_animation(8, 0, 32.5f, frameTime, entitylist[32]->frame);
+			}
+			else
+				entitylist[32]->frame = 0;
+}
+
+void monsterInfo2(int width)
+{
+
+	/*Monster*/
 
 			if(slowTime <= 75)
 				entitylist[7]->frame = 8;
@@ -535,7 +632,7 @@ void monsterInfo()
 					slowTime = 0;
 				}
 
-				if(entitylist[7]->PositionRect.x >= 650)
+				if(entitylist[7]->PositionRect.x >= 650+width)
 				{
 					moveright = 0;
 					moveleft = 1;
@@ -552,26 +649,12 @@ void monsterInfo()
 					slowTime = 0;
 				}
 
-				if(entitylist[7]->PositionRect.x <= 405)
+				if(entitylist[7]->PositionRect.x <= 405+width)
 				{
 					moveleft = 0;
 					moveright = 1;
 				}
 			}
-
-			if(entity_intersect_event_all(entitylist[0]))
-			{
-				/*Monster Animation*/
- 				sprite_animation(8, 0, 32.5f, frameTime, entitylist[32]->frame);
-			}
-			else
-				entitylist[32]->frame = 0;
-}
-
-void monsterInfo2()
-{
-
-	/*Monster*/
 
 			if(moveright2 == 1)
 			{
@@ -583,10 +666,10 @@ void monsterInfo2()
 					slowTime2 = 0;
 				}
 
-				if(entitylist[8]->PositionRect.x <= 358 && entitylist[8]->PositionRect.x >= 350)
+				if(entitylist[8]->PositionRect.x <= 358+width && entitylist[8]->PositionRect.x >= 350+width)
 					entitylist[8]->PositionRect.x += 365;
 
-				if(entitylist[8]->PositionRect.x >= 954)
+				if(entitylist[8]->PositionRect.x >= 954+width)
 				{
 					moveright2 = 0;
 					moveleft2 = 1;
@@ -603,10 +686,10 @@ void monsterInfo2()
 					slowTime2 = 0;
 				}
 
-				if(entitylist[8]->PositionRect.x <= 715 && entitylist[8]->PositionRect.x >= 708)
+				if(entitylist[8]->PositionRect.x <= 715+width && entitylist[8]->PositionRect.x >= 708+width)
 					entitylist[8]->PositionRect.x -= 365;
 
-				if(entitylist[8]->PositionRect.x <= 96)
+				if(entitylist[8]->PositionRect.x <= 96+width)
 				{
 					moveleft2 = 0;
 					moveright2 = 1;
@@ -615,9 +698,50 @@ void monsterInfo2()
 
 }
 
+void monsterInfo3(int width)
+{
+	if(transCheck == 1 && LeverFrame[11] == 0)
+		Fall(entitylist[58]->PositionRect, entitylist[51]->PositionTemp, deltaTime, entitylist[51], 1);
+	else
+	{
+		entitylist[58]->PositionRect.y = -578;
+		entitylist[51]->PositionRect.x = entitylist[0]->PositionRect.x - 100;
+		entitylist[58]->PositionRect.x = entitylist[51]->PositionRect.x;
+	}
+
+	if(entitylist[58]->PositionRect.y >= 1180)
+	{
+		entitylist[58]->PositionRect.y = -578;
+		entitylist[58]->PositionRect.x = entitylist[0]->PositionRect.x - 100;
+	}
+
+	if(slowTime3 == 1950)
+	{	
+		entitylist[51]->frame++;
+		entitylist[58]->frame++;
+		slowTime3 = 0;
+	}
+	else
+	{
+		slowTime3++;
+	}
+
+	if(entitylist[51]->frame == 8 || entitylist[58]->frame == 8)
+		entitylist[51]->frame = entitylist[58]->frame = 0;
+
+}
 
 void leverAction()
 {
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[9])
+					{
+							LeverFrame[11] = 1;
+					}
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[59])
+					{
+							LeverFrame[12] = 1;
+							entitylist[16]->health = 0;
+					}
 					if(entity_return_intersect_all(entitylist[0]) == entitylist[33])
 					{
 							LeverFrame[0] = 1;
