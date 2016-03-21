@@ -1,13 +1,44 @@
-﻿Build started 3/19/2016 4:33:24 PM.
+﻿Build started 3/21/2016 12:28:24 AM.
      1>Project "C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\gametest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt game.c
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt entity.c game.c items.c level.c physics.c
          game.c
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(118): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(127): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(608): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(128): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(137): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\game.c(733): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+         entity.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(46): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(47): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(77): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(78): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(125): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(125): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(257): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(257): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(261): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(261): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(282): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(282): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(286): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(286): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(307): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(307): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(311): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(311): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(328): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\entity.c(329): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+         Generating Code...
+         Compiling...
+         physics.c
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(15): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(31): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(47): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\stephen\desktop\2d game project\2d-game-project\win32\physics.c(65): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+         level.c
+         items.c
+         Generating Code...
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Stephen\Desktop\2D game project\2d-Game-Project\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\Animation.obj
          Debug\camera.obj
@@ -29,4 +60,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.98
+Time Elapsed 00:00:02.60

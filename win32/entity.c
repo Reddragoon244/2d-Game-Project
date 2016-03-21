@@ -350,6 +350,21 @@ Entity_t *duplicEntity(Entity_t *a)
 	return &EntityList[i];
 }
 
+void entity_drawn_free()
+{
+	int i = 0;
+
+	 for (i = 0; i < entityMax;i++)
+    {
+        if (!EntityList[i].inuse)
+        {
+            continue;
+        }
+		else
+			EntityList[i].drawn = 0;
+    }
+}
+
 /*
 
 Entity_S *entity_new()

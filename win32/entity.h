@@ -69,6 +69,7 @@ void closeEntitySystem();
 void entity_think_all();
 void entity_update_all();
 void entity_draw_all();
+void entity_drawn_free();
 
 int entity_intersect_all(Entity_t *a);
 int entity_intersect_event_all(Entity_t *a);
