@@ -364,6 +364,8 @@ void loadEntities()
 		entitylist[63] = entity_load(spritelist[9], 1, 1);/*Lever puzzlefour*/
 		entitylist[64] = entity_load(spritelist[9], 1, 1);/*Lever puzzlefour*/
 		entitylist[65] = entity_load(spritelist[24], 1, 1);/*You Win*/
+		entitylist[66] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
+		entitylist[67] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
 
 }
 
@@ -454,6 +456,9 @@ void InitPos()
 	LeverFrame[14] = 0;
 	LeverFrame[15] = 0;
 
+	LeverFrame[16] = 0;
+	LeverFrame[17] = 0;
+
 	/*Eyes*/
 	entitylist[60]->PositionRect.x = 412+1080;
 	entitylist[60]->PositionRect.y = entitylist[60]->PositionTemp.y = 20;
@@ -486,6 +491,9 @@ void InitPos()
 	entitylist[20]->dontColl = 1;
 	entitylist[21]->dontColl = 1;
 	entitylist[22]->dontColl = 1;
+
+	entitylist[66]->dontColl = 1;
+	entitylist[67]->dontColl = 1;
 
 	/*Lever Puzzle 4*/
 	entitylist[62]->dontColl = 1;
@@ -631,6 +639,8 @@ void puzzleLevelthree(int width)
 		entity_draw(entitylist[54], 0, renderer, 386+width, 350, Camera);
 		entity_draw(entitylist[57], 0, renderer, 650+width, 150, Camera);
 		entity_draw(entitylist[9], LeverFrame[11], renderer, 796+width, 117, Camera);
+		entity_draw(entitylist[67], LeverFrame[17], renderer, 436+width, 317, Camera);
+		entity_draw(entitylist[66], LeverFrame[16], renderer, 700+width, 518, Camera);
 
 		if(LeverFrame[11] == 0)
 			entity_draw(entitylist[58], entitylist[58]->frame, renderer, entitylist[58]->PositionRect.x+width, entitylist[58]->PositionRect.y, Camera);
@@ -805,8 +815,13 @@ void monsterInfo2(int leftMax, int rightMax, int width)
 
 void monsterInfo3(int width)
 {
+	int movespeed = 1;
+
+	if(LeverFrame[16] == 1)
+		movespeed = 3;
+
 	if((transCheck == 1 && LeverFrame[11] == 0) || (transCheck == 1 && level == 2))
-		Fall(entitylist[58]->PositionRect, entitylist[58]->PositionTemp, deltaTime, entitylist[51], 1);
+		Fall(entitylist[58]->PositionRect, entitylist[58]->PositionTemp, deltaTime, entitylist[51], movespeed);
 	else
 	{
 		entitylist[58]->PositionRect.y = -578;
@@ -881,6 +896,14 @@ void monsterInfo4(int leftMax, int rightMax, int width, int teleDistance)
 
 void leverAction()
 {
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[66])
+					{
+							LeverFrame[16] = 1;
+					}
+					if(entity_return_intersect_all(entitylist[0]) == entitylist[67])
+					{
+							LeverFrame[17] = 1;
+					}
 					if(entity_return_intersect_all(entitylist[0]) == entitylist[64])
 					{
 							LeverFrame[15] = 1;
