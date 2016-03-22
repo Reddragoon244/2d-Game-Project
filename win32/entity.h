@@ -13,17 +13,24 @@
 
 static const Uint32 entityMax = 1000;
 
+
 typedef struct Entity_S
 {
 	int inuse;						/**<flag for tracking resource use*/
 	Sprite_T *sprite;
 	int frame;
 	int cameraEnt;
+	int drawn;
+	int dontColl;
 	Vector2d position;
 	Vector2d velocity;
 	Vector2d origin;
 	SDL_Rect bounds;
-	float health, healthMax;
+	SDL_Rect groundBounds;
+	SDL_Rect EventBounds;
+	SDL_Rect PositionRect;
+	SDL_Rect PositionTemp;
+	int health, healthMax;
 	int state;
 
 	void (*draw) (struct Entity_S *self, SDL_Renderer *renderer);
@@ -55,16 +62,24 @@ void entity_free(Entity_t **entity);
 *return NULL on error or no more space for entities
 */
 Entity_t *entity_load(Sprite *sprite, float health, float healthMax);
+Entity_t *duplicEntity(Entity_t *a);
 
 void closeEntitySystem();
 
 void entity_think_all();
 void entity_update_all();
 void entity_draw_all();
+void entity_drawn_free();
 
-Entity_t *entity_intesect_all(Entity_t *a);
+int entity_intersect_all(Entity_t *a);
+int entity_intersect_event_all(Entity_t *a);
+Entity_t *entity_return_intersect_all(Entity_t *a);
+int entity_ground_intersect_all(Entity_t *a);
 int entity_intersect_rect(Entity_t *a,SDL_Rect r);
 int entity_intersect(Entity_t *a, Entity_t *b);
+int entity_intersect_event(Entity_t *a, Entity_t *b);
+int entity_ground_intersect(Entity_t *a, Entity_t *b);
+void entity_draw(Entity_t *entity, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera);
 
 /* 
 

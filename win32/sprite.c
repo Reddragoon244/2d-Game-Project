@@ -31,7 +31,7 @@ void initSpriteSystem()
 Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
 {
 	int i;
-  SDL_Texture *temp;
+  SDL_Texture *temp = NULL;
 
   /*first search to see if the requested sprite image is alreday loaded*/
   for(i = 0; i < NumSprites; i++)
@@ -55,7 +55,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   {
     if(!SpriteList[i].refcount)break;
   }
-
+  
   SDL_Surface *surface = SDL_LoadBMP(filename);
   temp = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
