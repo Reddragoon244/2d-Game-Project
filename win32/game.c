@@ -398,12 +398,12 @@ void InitPos()
 	entitylist[13]->PositionRect.y = 482;
 	entitylist[14]->PositionRect.y = 482;
 	entitylist[15]->PositionRect.y = 482;
-	entitylist[11]->health = 0;
-	entitylist[16]->health = 0;
-	entitylist[12]->health = 0;
-	entitylist[13]->health = 0;
-	entitylist[14]->health = 0;
-	entitylist[15]->health = 0;
+	entitylist[11]->health = 1;
+	entitylist[16]->health = 1;
+	entitylist[12]->health = 1;
+	entitylist[13]->health = 1;
+	entitylist[14]->health = 1;
+	entitylist[15]->health = 1;
 	/*Monster Puzzle One Init*/
 	entitylist[32]->PositionRect.x = 638;
 	entitylist[32]->PositionRect.y = 253;
