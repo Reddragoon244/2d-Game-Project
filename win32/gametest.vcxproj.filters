@@ -45,6 +45,18 @@
     <ClCompile Include="sound.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="font.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="widget.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fileIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="editor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vector.h">
@@ -72,6 +84,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fileIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

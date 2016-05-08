@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include "SDL.h"
-#include "SDL_image.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include "font.h"
 #include "sound.h"
 #include "sprite.h"
 #include "entity.h"
@@ -10,6 +11,9 @@
 #include "Animation.h"
 #include "items.h"
 #include "physics.h"
+#include "widget.h"
+#include "fileIO.h"
+#include "editor.h"
 
 SDL_Renderer *renderer;
 SDL_Texture *texture;
@@ -18,6 +22,11 @@ Entity_t *entitylist[entityMax];
 Level *backg[levelMax];
 Music *musicList[MAX_MUSIC];
 SoundEffect *soundList[MAX_SOUND];
+Font *fontList[MAX_FONT];
+Widget *widgetList[MAX_WIDGET];
+
+SDL_Rect mouse = {0, 0, 0, 0};
+SDL_Rect editorMouse = {0, 0, 0, 0};
 
 int transCheck = 0;
 int LeverFrame[entityMax];
@@ -29,8 +38,13 @@ float slowTime = 0;
 float slowTime2 = 0;
 float slowTime3 = 0;
 float gameOverTime = 0;
-int level = 1;
+int level = 33;
+int scene = 0;
+int pausegame = 0;
 
+int editorSS = 1;
+int helpTrue = 1;
+int editorSprite = 99;
 int i = 0;
 float frameTime = 0;
 float deltaTime = 0;
@@ -41,6 +55,10 @@ int groundCheck = 1;
 int actionCheck = 1;
 int gameOver = 0;
 
+void editor();
+void createEntity(int i, int x, int y);
+void load();
+void save();
 void loadEntities();
 void InitPos();
 void puzzleLevelone(int width);
@@ -48,6 +66,7 @@ void puzzleLeveltwo(int width);
 void puzzleLevelthree(int width);
 void puzzleLevelfour(int width);
 void ChangeWorlds();
+void LevelOrder();
 int puzzleoneInfo();
 void monsterInfo(Entity_t *a);
 void monsterInfo2(int leftMax, int rightMax, int width);
@@ -73,17 +92,17 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Error INIT PNG or JPG", SDL_GetError());
 
 		InitSoundSystem();
+		InitFontSystem();
 		loadEntities();
 		InitPos();
 
 		playerframe = 143;/*starting frame*/
 		backg[5] = backg[0];
 
-		musicList[0] = loadMusic("sounds/DontStopMeNow.mp3");
-		soundList[0] = loadSound("sounds/switch.wav");
-		soundList[1] = loadSound("sounds/jumping.wav");
-		//if(Mix_PlayMusic(musicList[0]->music, -1) == -1)
-			//printf("Mix_PlayMusic: %s\n", Mix_GetError());
+
+
+		if(Mix_PlayMusic(musicList[0]->music, -1) == -1)
+			printf("Mix_PlayMusic: %s\n", Mix_GetError());
 
 /////////////////////////////////////*Game*//////////////////////////////////////////////
 			while(isRunning)
@@ -93,11 +112,77 @@ int main(int argc, char *argv[])
 				while(SDL_PollEvent(&ev) != 0)
 				{
 					if(ev.type == SDL_QUIT)
+					{
 						isRunning = 0;
+					}else if(ev.type == SDL_MOUSEBUTTONDOWN)//for editor
+					{
+						mouse.x = ev.button.x;
+						mouse.y = ev.button.y;
+
+						if(scene == 2)
+						{
+							if(editorSprite != 99)
+								createEntity(editorSprite, editorMouse.x, editorMouse.y); 
+						}
+					}
+					else//store the position of the event
+					{
+						if(scene == 2 && pausegame == 0)
+						{
+							editorMouse.x = ev.button.x + Camera.x;
+							editorMouse.y = ev.button.y;
+							printf("%i, %i \n", editorMouse.x, editorMouse.y);
+						}
+					}
+
 				}
 
 				keys = SDL_GetKeyboardState(NULL);
 
+///////////////////////////////////*Main Menu*///////////////////////////////////////////
+			if(scene == 0)
+			{
+				font_draw(fontList[0], renderer, 140, 40, Camera, 1);
+
+				widgetList[0]->draw(widgetList[0], 0, renderer, 210, 240, Camera);
+				widgetList[3]->draw(widgetList[3], 0, renderer, 210, 440, Camera);
+				widgetList[2]->draw(widgetList[2], 0, renderer, 610, 240, Camera);
+				widgetList[4]->draw(widgetList[4], 0, renderer, 610, 440, Camera);
+
+				if(widgetList[0]->update(widgetList[0], mouse))
+				{
+					scene = 1;
+					level = 1;
+					mouse.x = 0;
+					mouse.y = 0;
+				}
+
+				if(widgetList[2]->update(widgetList[2], mouse))
+				{
+					scene = 1;
+					level = 1;
+					mouse.x = 0;
+					mouse.y = 0;
+					load();
+				}
+
+				if(widgetList[3]->update(widgetList[3], mouse))/*Editor*/
+				{
+					scene = 2;
+				}
+
+				if(widgetList[4]->update(widgetList[4], mouse))
+				{
+					mouse.x = 0;
+					mouse.y = 0;
+					isRunning = false;
+				}
+
+			}
+
+/////////////////////////////////////*GAME*//////////////////////////////////////////////
+			if(scene == 1 || scene == 2)
+			{
 /////////////////////////////////////*Death*/////////////////////////////////////////////
 				if(entity_return_intersect_all(entitylist[0]) == entitylist[32] || 
 					entity_return_intersect_all(entitylist[0]) == entitylist[7] || 
@@ -107,12 +192,15 @@ int main(int argc, char *argv[])
 					entity_return_intersect_all(entitylist[0]) == entitylist[58])
 				{
 					InitPos();
+					printf("death 1");
 				}
 				else if(entitylist[0]->PositionRect.y >= 800)
 				{
 					InitPos();
+					printf("death 2");
 				}
-
+			if(pausegame == 0)
+			{
 //////////////////////////////////////*Action*///////////////////////////////////////////
 				if(keys[SDL_SCANCODE_RETURN] && actionCheck == 1 && gameOver == 0)
 				{
@@ -183,7 +271,6 @@ int main(int argc, char *argv[])
 					}
 					
 				}
-
 ///////////////////////////////////*Changing Realms*////////////////////////////////////////////
 				if(keys[SDL_SCANCODE_T] && gameOver == 0)/*Entering the Twilight Realm*/
 				{
@@ -193,7 +280,7 @@ int main(int argc, char *argv[])
 					}
 					else
 					{
-
+						transCheck = 1;
 					}
 				}
 
@@ -205,18 +292,12 @@ int main(int argc, char *argv[])
 					}
 					else
 					{
-
+						transCheck = 0;
 					}
 				}
 
 				/*Door Thinks*/
-				entitylist[11]->PositionRect.y = doorThink(entitylist[11], 720, 450);
-				entitylist[16]->PositionRect.y = doorThink(entitylist[16], 720, 450);
-				entitylist[12]->PositionRect.y = doorThink(entitylist[12], 720, 482);
-				entitylist[13]->PositionRect.y = doorThink(entitylist[13], 720, 482);
-				entitylist[14]->PositionRect.y = doorThink(entitylist[14], 720, 482);
-				entitylist[15]->PositionRect.y = doorThink(entitylist[15], 720, 482);
-				entitylist[16]->PositionRect.y = doorThink(entitylist[16], 720, 450);
+				entity_update_all();
 
 				if(Camera.x > 2161)
 				{
@@ -231,34 +312,88 @@ int main(int argc, char *argv[])
 				SDL_RenderClear(renderer);
 
 				ChangeWorlds();
-
-				/*LEVEL 1*/
-				if(level == 1)
+				
+				if(scene == 2)
 				{
-					monsterInfo(entitylist[32]);
-					monsterInfo2(405, 650, 0);
-					monsterInfo3(0);
-					monsterInfo4(96, 954, 0, 365);
+					if(editorControls() == 0)
+					{
 
-					puzzleLevelone(1080);/*Puzzle One*/
-					puzzleLeveltwo(2160);/*Puzzle Two*/
-					puzzleLevelthree(0);
-				}
-				else
-				{
-					/*Level 2*/
-					monsterInfo(entitylist[32]);
-					monsterInfo2(2506, 2784, 0);
-					monsterInfo3(0);
-					monsterInfo4(1027, 2287, 0, 700);
-					boss();
-					puzzleLevelfour(0);
-				}
+					}
+					else
+						editorSprite = editorControls();
 
-				//printf("(%i, %i), (%i, %i), (%i, %i) \n", entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, entitylist[8]->PositionRect.x, entitylist[8]->PositionRect.y, entitylist[32]->PositionRect.x, entitylist[32]->PositionRect.y);
+					editor();
+				}
+				
+				if(scene == 1)
+					LevelOrder();
 
 				/*Player*/entity_draw(entitylist[0], playerframe, renderer, entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, Camera);/*Call the draw to draw the sprite to the screen*/
+			}
+////////////////////////////////////*PAUSE MENU*/////////////////////////////////////////
 
+				if(keys[SDL_SCANCODE_ESCAPE] || pausegame == 1)
+				{
+					pausegame = 1;
+
+					widgetList[0]->draw(widgetList[0], 0, renderer, 410, 140, Camera);
+					widgetList[1]->draw(widgetList[1], 0, renderer, 410, 340, Camera);
+					widgetList[4]->draw(widgetList[4], 0, renderer, 410, 540, Camera);
+
+					if(widgetList[0]->update(widgetList[0], mouse))
+					{
+						pausegame = 0;
+						mouse.x = 0;
+						mouse.y = 0;
+					}
+
+					if(widgetList[1]->update(widgetList[1], mouse))
+					{
+						save();
+						mouse.x = 0;
+						mouse.y = 0;
+					}
+
+					if(widgetList[4]->update(widgetList[4], mouse))
+					{
+						mouse.x = 0;
+						mouse.y = 0;
+						isRunning = false;
+					}
+					
+				}
+
+				if(keys[SDL_SCANCODE_H] && scene == 2 && helpTrue == 1)
+				{
+					font_draw(fontList[1], renderer, 0, 40, Camera, 1);
+					font_draw(fontList[2], renderer, 0, 80, Camera, 1);
+					font_draw(fontList[3], renderer, 0, 120, Camera, 1);
+					font_draw(fontList[4], renderer, 0, 160, Camera, 1);
+					font_draw(fontList[5], renderer, 0, 200, Camera, 1);
+					font_draw(fontList[6], renderer, 0, 240, Camera, 1);
+					font_draw(fontList[7], renderer, 0, 280, Camera, 1);
+					font_draw(fontList[8], renderer, 0, 320, Camera, 1);
+					font_draw(fontList[9], renderer, 0, 360, Camera, 1);
+					font_draw(fontList[10], renderer, 0, 400, Camera, 1);
+					font_draw(fontList[11], renderer, 0, 440, Camera, 1);
+					
+					if(!keys[SDL_SCANCODE_H])
+						helpTrue = 0;
+				}
+				else
+					helpTrue = 1;
+
+					if((spritelist[editorSprite] != NULL && entitylist[200] == NULL) || (editorSS == 0 && entitylist[200]->sprite != spritelist[editorSprite]))
+						{
+							entitylist[200] = entity_load(spritelist[editorSprite], 1, 1);
+							editorSS = 0;
+						}
+					if(entitylist[200] != NULL)
+							entity_draw(entitylist[200], 0, renderer, editorMouse.x, editorMouse.y, Camera);
+
+					//if(entity_find(spritelist[11]) != NULL)
+						//printf("%i\n", entity_find(spritelist[11])->PositionRect.x);
+			}
 				SDL_RenderPresent(renderer);
 			}
 		
@@ -287,6 +422,9 @@ void loadEntities()
 		backg[2] = levelloadbg("bosslevel.png", renderer);
 		backg[3] = levelloadbg("bosslevel2.png", renderer);
 
+		musicList[0] = loadMusic("sounds/DontStopMeNow.mp3");
+		soundList[0] = loadSound("sounds/switch.wav");
+		soundList[1] = loadSound("sounds/jumping.wav");
 
 		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
 		spritelist[1] = sprite_load("Hplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
@@ -313,7 +451,30 @@ void loadEntities()
 		spritelist[22] = sprite_load("enemy4.bmp", 8, 1, renderer);/*Platform Sprite Load*/
 		spritelist[23] = sprite_load("eyes.bmp", 3, 1, renderer);/*Platform Sprite Load*/
 		spritelist[24] = sprite_load("youwin.bmp", 1, 1, renderer);/*Platform Sprite Load*/
+		spritelist[25] = sprite_load("StartButton.bmp", 1, 1, renderer);/*Menu Button*/
+		spritelist[26] = sprite_load("SaveButton.bmp", 1, 1, renderer);/*Menu Button*/
+		spritelist[27] = sprite_load("LoadButton.bmp", 1, 1, renderer);/*Menu Button*/
+		spritelist[28] = sprite_load("EditorButton.bmp", 1, 1, renderer);/*Menu Button*/
+		spritelist[29] = sprite_load("ExitButton.bmp", 1, 1, renderer);/*Menu Button*/
 
+		fontList[0] = loadFont("fonts/Coalition.ttf", 60, "Into the Twilight", renderer);
+		fontList[1] = loadFont("fonts/font.ttf", 40, "Welcome to the Into The Twilight Level Editor.", renderer);
+		fontList[2] = loadFont("fonts/font.ttf", 40, " 1 - Vertical platform 1080 pixels.", renderer);
+		fontList[3] = loadFont("fonts/font.ttf", 40, " 2 - Vertical platform 540 pixels.", renderer);
+		fontList[4] = loadFont("fonts/font.ttf", 40, " 3 - Vertical platform 270 pixels.", renderer);
+		fontList[5] = loadFont("fonts/font.ttf", 40, " 4 - Horizantal platform 1080 pixels.", renderer);
+		fontList[6] = loadFont("fonts/font.ttf", 40, " 5 - Horizantal platform 540 pixels.", renderer);
+		fontList[7] = loadFont("fonts/font.ttf", 40, " 6 - Horizantal platform 270 pixels.", renderer);
+		fontList[8] = loadFont("fonts/font.ttf", 40, " 7 - Lever.", renderer);
+		fontList[9] = loadFont("fonts/font.ttf", 40, " 8 - Door.", renderer);
+		fontList[10] = loadFont("fonts/font.ttf", 30, " Press Left Click after the Number to Place the Item.", renderer);
+		fontList[11] = loadFont("fonts/font.ttf", 40, " Help", renderer);
+
+		widgetList[0] = loadWidget(spritelist[25], fontList[0]);/*Widget Start Button*/
+		widgetList[1] = loadWidget(spritelist[26], fontList[0]);/*Widget Save Button*/
+		widgetList[2] = loadWidget(spritelist[27], fontList[0]);/*Widget Load Button*/
+		widgetList[3] = loadWidget(spritelist[28], fontList[0]);/*Widget Editor Button*/
+		widgetList[4] = loadWidget(spritelist[29], fontList[0]);/*Widget Exit Button*/
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Player*/
 		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Hplatform1080*/
@@ -383,6 +544,13 @@ void loadEntities()
 		entitylist[65] = entity_load(spritelist[24], 1, 1);/*You Win*/
 		entitylist[66] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
 		entitylist[67] = entity_load(spritelist[9], 1, 1);/*Lever puzzlethree*/
+
+		entitylist[11]->update = doorThink;
+		entitylist[12]->update = doorThink;
+		entitylist[13]->update = doorThink;
+		entitylist[14]->update = doorThink;
+		entitylist[15]->update = doorThink;
+		entitylist[16]->update = doorThink;
 
 }
 
@@ -655,7 +823,8 @@ void puzzleLevelthree(int width)
 		entity_draw(entitylist[53], 0, renderer, 686+width, 550, Camera);
 		entity_draw(entitylist[54], 0, renderer, 386+width, 350, Camera);
 		entity_draw(entitylist[57], 0, renderer, 650+width, 150, Camera);
-		entity_draw(entitylist[9], LeverFrame[11], renderer, 796+width, 117, Camera);				entity_draw(entitylist[67], LeverFrame[17], renderer, 436+width, 317, Camera);
+		entity_draw(entitylist[9], LeverFrame[11], renderer, 796+width, 117, Camera);				
+		entity_draw(entitylist[67], LeverFrame[17], renderer, 436+width, 317, Camera);
 		entity_draw(entitylist[66], LeverFrame[16], renderer, 700+width, 518, Camera);
 
 		if(LeverFrame[11] == 0)
@@ -754,6 +923,234 @@ void ChangeWorlds()
 		level = 2;
 		InitPos();
 		entity_drawn_free();
+	}
+}
+
+void createEntity(int i, int x, int y)
+{
+	int a;
+
+	if(transCheck == 0)
+	{
+		for(a = 68; a<=76; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				entitylist[a] = entity_load(spritelist[i], 1, 1);
+				entitylist[a]->PositionRect.x = x;
+				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->frame = 0;
+
+				if(entitylist[i]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+				
+				if(entitylist[i]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = 1;
+				}
+				break;
+			}
+		}
+	}
+	else if(transCheck == 1) 
+	{
+		for(a = 77; a<=85; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				entitylist[a] = entity_load(spritelist[i], 1, 1);
+				entitylist[a]->PositionRect.x = x;
+				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->frame = 0;
+
+				if(entitylist[i]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+
+				if(entitylist[i]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = 1;
+				}
+				break;
+			}
+		}
+	}
+	else if(transCheck == 2)
+	{
+		for(a = 86; a<=94; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				entitylist[a] = entity_load(spritelist[i], 1, 1);
+				entitylist[a]->PositionRect.x = x;
+				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->frame = 0;
+
+				if(entitylist[i]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+
+				if(entitylist[i]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = 1;
+				}
+				break;
+			}
+		}
+	}
+
+}
+
+void editor()
+{
+	if(transCheck == 0)/*Real World Platforms*/
+	{
+		levelDraw(backg[0], renderer, Camera);/*Real World Background*/
+
+		if(entitylist[68] != NULL)
+			entity_draw(entitylist[68], entitylist[68]->frame, renderer, entitylist[68]->PositionRect.x, entitylist[68]->PositionRect.y, Camera);
+		if(entitylist[69] != NULL)
+			entity_draw(entitylist[69], entitylist[69]->frame, renderer, entitylist[69]->PositionRect.x, entitylist[69]->PositionRect.y, Camera);
+		if(entitylist[70] != NULL)
+			entity_draw(entitylist[70], entitylist[70]->frame, renderer, entitylist[70]->PositionRect.x, entitylist[70]->PositionRect.y, Camera);
+		if(entitylist[71] != NULL)
+			entity_draw(entitylist[71], entitylist[71]->frame, renderer, entitylist[71]->PositionRect.x, entitylist[71]->PositionRect.y, Camera);
+		if(entitylist[72] != NULL)
+			entity_draw(entitylist[72], entitylist[72]->frame, renderer, entitylist[72]->PositionRect.x, entitylist[72]->PositionRect.y, Camera);
+		if(entitylist[73] != NULL)
+			entity_draw(entitylist[73], entitylist[73]->frame, renderer, entitylist[73]->PositionRect.x, entitylist[73]->PositionRect.y, Camera);
+		if(entitylist[74] != NULL)
+			entity_draw(entitylist[74], entitylist[74]->frame, renderer, entitylist[74]->PositionRect.x, entitylist[74]->PositionRect.y, Camera);
+		if(entitylist[75] != NULL)
+			entity_draw(entitylist[75], entitylist[75]->frame, renderer, entitylist[75]->PositionRect.x, entitylist[75]->PositionRect.y, Camera);
+		if(entitylist[76] != NULL)
+			entity_draw(entitylist[76], entitylist[76]->frame, renderer, entitylist[76]->PositionRect.x, entitylist[76]->PositionRect.y, Camera);
+
+		/*Not Drawn*/
+		if(entitylist[77] != NULL)
+			entitylist[77]->drawn = 0;
+		if(entitylist[78] != NULL)
+			entitylist[78]->drawn = 0;
+		if(entitylist[79] != NULL)
+			entitylist[79]->drawn = 0;
+		if(entitylist[80] != NULL)
+			entitylist[80]->drawn = 0;
+		if(entitylist[81] != NULL)
+			entitylist[81]->drawn = 0;
+		if(entitylist[82] != NULL)
+			entitylist[82]->drawn = 0;
+		if(entitylist[83] != NULL)
+			entitylist[83]->drawn = 0;
+		if(entitylist[84] != NULL)
+			entitylist[84]->drawn = 0;
+		if(entitylist[85] != NULL)
+			entitylist[85]->drawn = 0;
+
+	}
+	else/*Twilight Realms Platforms*/
+	{
+		levelDraw(backg[1], renderer, Camera);/*Twilight World Background*/
+
+		if(entitylist[77] != NULL)
+			entity_draw(entitylist[77], entitylist[77]->frame, renderer, entitylist[77]->PositionRect.x, entitylist[77]->PositionRect.y, Camera);
+		if(entitylist[78] != NULL)
+			entity_draw(entitylist[78], entitylist[78]->frame, renderer, entitylist[78]->PositionRect.x, entitylist[78]->PositionRect.y, Camera);
+		if(entitylist[79] != NULL)
+			entity_draw(entitylist[79], entitylist[79]->frame, renderer, entitylist[79]->PositionRect.x, entitylist[79]->PositionRect.y, Camera);
+		if(entitylist[80] != NULL)
+			entity_draw(entitylist[80], entitylist[80]->frame, renderer, entitylist[80]->PositionRect.x, entitylist[80]->PositionRect.y, Camera);
+		if(entitylist[81] != NULL)
+			entity_draw(entitylist[81], entitylist[81]->frame, renderer, entitylist[81]->PositionRect.x, entitylist[81]->PositionRect.y, Camera);
+		if(entitylist[82] != NULL)
+			entity_draw(entitylist[82], entitylist[82]->frame, renderer, entitylist[82]->PositionRect.x, entitylist[82]->PositionRect.y, Camera);
+		if(entitylist[83] != NULL)
+			entity_draw(entitylist[83], entitylist[83]->frame, renderer, entitylist[83]->PositionRect.x, entitylist[83]->PositionRect.y, Camera);
+		if(entitylist[84] != NULL)
+			entity_draw(entitylist[84], entitylist[84]->frame, renderer, entitylist[84]->PositionRect.x, entitylist[84]->PositionRect.y, Camera);
+		if(entitylist[85] != NULL)
+			entity_draw(entitylist[85], entitylist[85]->frame, renderer, entitylist[85]->PositionRect.x, entitylist[85]->PositionRect.y, Camera);
+
+		/*Not Drawn*/
+		if(entitylist[68] != NULL)
+			entitylist[68]->drawn = 0;
+		if(entitylist[69] != NULL)
+			entitylist[69]->drawn = 0;
+		if(entitylist[70] != NULL)
+			entitylist[70]->drawn = 0;
+		if(entitylist[71] != NULL)
+			entitylist[71]->drawn = 0;
+		if(entitylist[72] != NULL)
+			entitylist[72]->drawn = 0;
+		if(entitylist[73] != NULL)
+			entitylist[73]->drawn = 0;
+		if(entitylist[74] != NULL)
+			entitylist[74]->drawn = 0;
+		if(entitylist[75] != NULL)
+			entitylist[75]->drawn = 0;
+		if(entitylist[76] != NULL)
+			entitylist[76]->drawn = 0;
+
+	}
+
+	/*Both Worlds*/
+		entity_draw(entitylist[38], 0, renderer, 1080, 710, Camera);/*Floor*/
+		entity_draw(entitylist[39], 0, renderer, 2160, 710, Camera);/*Floor*/
+		entity_draw(entitylist[40], 0, renderer, 0, 710, Camera);/*Floor*/
+
+		if(entitylist[86] != NULL)
+			entity_draw(entitylist[86], entitylist[86]->frame, renderer, entitylist[86]->PositionRect.x, entitylist[86]->PositionRect.y, Camera);
+		if(entitylist[87] != NULL)
+			entity_draw(entitylist[87], entitylist[87]->frame, renderer, entitylist[87]->PositionRect.x, entitylist[87]->PositionRect.y, Camera);
+		if(entitylist[88] != NULL)
+			entity_draw(entitylist[88], entitylist[88]->frame, renderer, entitylist[88]->PositionRect.x, entitylist[88]->PositionRect.y, Camera);
+		if(entitylist[89] != NULL)
+			entity_draw(entitylist[89], entitylist[89]->frame, renderer, entitylist[89]->PositionRect.x, entitylist[89]->PositionRect.y, Camera);
+		if(entitylist[90] != NULL)
+			entity_draw(entitylist[90], entitylist[90]->frame, renderer, entitylist[90]->PositionRect.x, entitylist[90]->PositionRect.y, Camera);
+		if(entitylist[91] != NULL)
+			entity_draw(entitylist[91], entitylist[91]->frame, renderer, entitylist[91]->PositionRect.x, entitylist[91]->PositionRect.y, Camera);
+		if(entitylist[92] != NULL)
+			entity_draw(entitylist[92], entitylist[92]->frame, renderer, entitylist[92]->PositionRect.x, entitylist[92]->PositionRect.y, Camera);
+		if(entitylist[93] != NULL)
+			entity_draw(entitylist[93], entitylist[93]->frame, renderer, entitylist[93]->PositionRect.x, entitylist[93]->PositionRect.y, Camera);
+		if(entitylist[94] != NULL)
+			entity_draw(entitylist[94], entitylist[94]->frame, renderer, entitylist[94]->PositionRect.x, entitylist[94]->PositionRect.y, Camera);
+
+}
+
+void LevelOrder()
+{
+		/*LEVEL 1*/
+	if(level == 1)
+	{
+		monsterInfo(entitylist[32]);
+		monsterInfo2(405, 650, 0);
+		monsterInfo3(0);
+		monsterInfo4(96, 954, 0, 365);
+
+		puzzleLevelone(1080);/*Puzzle One*/
+		puzzleLeveltwo(2160);/*Puzzle Two*/
+		puzzleLevelthree(0);
+	}
+	else
+	{
+		/*Level 2*/
+		monsterInfo(entitylist[32]);
+		monsterInfo2(2506, 2784, 0);
+		monsterInfo3(0);
+		monsterInfo4(1027, 2287, 0, 700);
+		boss();
+		puzzleLevelfour(0);
 	}
 }
 
@@ -1120,6 +1517,13 @@ void leverAction()
 						}
 					}
 
+					if(entity_return_intersect_all(entitylist[0])->sprite == spritelist[9] && entity_return_intersect_all(entitylist[0])->update != NULL && entity_return_intersect_all(entitylist[0])->health == 1)
+					{
+						entity_return_intersect_all(entitylist[0])->health = 0;
+						entity_return_intersect_all(entitylist[0])->update(entity_return_intersect_all(entitylist[0]));
+						entity_return_intersect_all(entitylist[0])->touch(entity_return_intersect_all(entitylist[0]), entity_find(spritelist[11]));
+					}
+
 }
 
 void boss()
@@ -1173,4 +1577,70 @@ void boss()
 		entitylist[61]->frame = 2;
 	}
 
+}
+
+void save()
+{
+	saveContents(LeverFrame[0] ,"savegames/save1.txt");
+	saveContents(LeverFrame[1] ,"savegames/save1.txt");
+	saveContents(LeverFrame[2] ,"savegames/save1.txt");
+	saveContents(LeverFrame[3] ,"savegames/save1.txt");
+	saveContents(LeverFrame[4] ,"savegames/save1.txt");
+	saveContents(LeverFrame[5] ,"savegames/save1.txt");
+	saveContents(LeverFrame[6] ,"savegames/save1.txt");
+	saveContents(LeverFrame[7] ,"savegames/save1.txt");
+	saveContents(LeverFrame[8] ,"savegames/save1.txt");
+	saveContents(LeverFrame[9] ,"savegames/save1.txt");
+	saveContents(LeverFrame[10] ,"savegames/save1.txt");
+	saveContents(LeverFrame[11] ,"savegames/save1.txt");
+	saveContents(LeverFrame[12] ,"savegames/save1.txt");
+	saveContents(LeverFrame[13] ,"savegames/save1.txt");
+	saveContents(LeverFrame[14] ,"savegames/save1.txt");
+	saveContents(LeverFrame[15] ,"savegames/save1.txt");
+	saveContents(LeverFrame[16] ,"savegames/save1.txt");
+	saveContents(LeverFrame[17] ,"savegames/save1.txt");
+	saveContents(entitylist[11]->health,"savegames/save1.txt");
+	saveContents(entitylist[12]->health,"savegames/save1.txt");
+	saveContents(entitylist[13]->health,"savegames/save1.txt");
+	saveContents(entitylist[14]->health,"savegames/save1.txt");
+	saveContents(entitylist[15]->health,"savegames/save1.txt");
+	saveContents(entitylist[16]->health,"savegames/save1.txt");
+	saveContents(entitylist[0]->PositionRect.x,"savegames/save1.txt");
+	saveContents(entitylist[0]->PositionRect.y,"savegames/save1.txt");
+	saveContents(entitylist[0]->PositionTemp.x,"savegames/save1.txt");
+	saveContents(entitylist[0]->PositionTemp.y,"savegames/save1.txt");
+	saveContents(999999,"savegames/save1.txt");
+}
+
+void load()
+{
+	LeverFrame[0] = loadContents("savegames/save1.txt");
+	LeverFrame[1] = loadContents("savegames/save1.txt");
+	LeverFrame[2] = loadContents("savegames/save1.txt");
+	LeverFrame[3] = loadContents("savegames/save1.txt");
+	LeverFrame[4] = loadContents("savegames/save1.txt");
+	LeverFrame[5] = loadContents("savegames/save1.txt");
+	LeverFrame[6] = loadContents("savegames/save1.txt");
+	LeverFrame[7] = loadContents("savegames/save1.txt");
+	LeverFrame[8] = loadContents("savegames/save1.txt");
+	LeverFrame[9] = loadContents("savegames/save1.txt");
+	LeverFrame[10] = loadContents("savegames/save1.txt");
+	LeverFrame[11] = loadContents("savegames/save1.txt");
+	LeverFrame[12] = loadContents("savegames/save1.txt");
+	LeverFrame[13] = loadContents("savegames/save1.txt");
+	LeverFrame[14] = loadContents("savegames/save1.txt");
+	LeverFrame[15] = loadContents("savegames/save1.txt");
+	LeverFrame[16] = loadContents("savegames/save1.txt");
+	LeverFrame[17] = loadContents("savegames/save1.txt");
+	entitylist[11]->health = loadContents("savegames/save1.txt");
+	entitylist[12]->health = loadContents("savegames/save1.txt");
+	entitylist[13]->health = loadContents("savegames/save1.txt");
+	entitylist[14]->health = loadContents("savegames/save1.txt");
+	entitylist[15]->health = loadContents("savegames/save1.txt");
+	entitylist[16]->health = loadContents("savegames/save1.txt");
+	entitylist[0]->PositionRect.x = loadContents("savegames/save1.txt");
+	entitylist[0]->PositionRect.y = loadContents("savegames/save1.txt");
+	entitylist[0]->PositionTemp.x = loadContents("savegames/save1.txt");
+	entitylist[0]->PositionTemp.x = loadContents("savegames/save1.txt");
+	
 }

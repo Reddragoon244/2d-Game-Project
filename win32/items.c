@@ -1,28 +1,38 @@
 ﻿#include "items.h"
 
-int doorThink(Entity_t *self, int endPosition, int startPosition)
+void doorThink(Entity_S *self)
 {
 	if(self->health == 0)
 	{
-			return endPosition;
+		self->PositionRect.y = 720;
 	}
 	else
 	{
-		return startPosition;
+
 	}
 }
 
-int leverThink(Entity_t *self)
+void leverThink(Entity_S *self)
 {
 	if(self->health == 0)
 	{
-		return 1;
+		self->frame = 1;
 	}
 	else
-		return 0;
+		self->frame = 0;
 }
 
-void boxThink(Entity_t *self, Entity_t *player, SDL_Rect t, SDL_Rect r, SDL_Rect &Box)
+void OpenDoor(Entity_S *self, Entity_S *other)
+{
+	if(self->health == 0)
+	{
+		other->health = 0;
+	}
+	else
+		other->health = 1;
+}
+
+void boxThink(Entity_S *self, Entity_S *player, SDL_Rect t, SDL_Rect r, SDL_Rect &Box)
 {
 	if(self->health == 0)
 	{
@@ -38,7 +48,7 @@ void boxThink(Entity_t *self, Entity_t *player, SDL_Rect t, SDL_Rect r, SDL_Rect
 	}
 }
 
-int buttonThink(Entity_t *self)
+int buttonThink(Entity_S *self)
 {
 	if(self->health == 0)
 	{

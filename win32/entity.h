@@ -71,6 +71,7 @@ void entity_update_all();
 void entity_draw_all();
 void entity_drawn_free();
 
+Entity_t *entity_find(Sprite *sprite);
 int entity_intersect_all(Entity_t *a);
 int entity_intersect_event_all(Entity_t *a);
 Entity_t *entity_return_intersect_all(Entity_t *a);

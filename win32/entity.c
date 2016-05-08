@@ -100,6 +100,22 @@ void entity_free(Entity_t *entity)
   lying around*/
 }
 
+void entity_update_all()
+{
+	int i;
+
+	for(i = 0;i <= NumEntity;i++)
+	{
+		if(EntityList[i].update == NULL)
+		{
+
+		}
+		else
+			EntityList[i].update(&EntityList[i]);
+	}
+	
+}
+
 void closeEntitySystem()
 {
   int i;
@@ -149,7 +165,7 @@ int entity_intersect_all(Entity_t *a)
 					{
 						return 0;
 					}
-						printf("%s \n", EntityList[i].sprite->filename);
+
 				return 1;
         }
     }
@@ -363,6 +379,33 @@ void entity_drawn_free()
 		else
 			EntityList[i].drawn = 0;
     }
+}
+
+Entity_t *entity_find(Sprite *sprite)
+{
+	int i;
+
+	if(sprite == NULL)
+		return 0;
+
+	for(i = 0; i<NumEntity; i++)
+	{
+		if(EntityList[i].drawn == 1 && EntityList[i].sprite == sprite)
+		{
+			if(EntityList[i].health == 0)
+			{
+
+			}
+			else
+			{
+				return &EntityList[i];
+				break;
+			}
+		}
+	}
+
+	printf("Error no Entity Found drawn with that Sprite");
+	return 0;
 }
 
 /*

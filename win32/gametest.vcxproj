@@ -13,7 +13,10 @@
   <ItemGroup>
     <ClCompile Include="Animation.c" />
     <ClCompile Include="camera.c" />
+    <ClCompile Include="editor.c" />
     <ClCompile Include="entity.c" />
+    <ClCompile Include="fileIO.c" />
+    <ClCompile Include="font.c" />
     <ClCompile Include="game.c" />
     <ClCompile Include="items.c" />
     <ClCompile Include="level.c" />
@@ -23,17 +26,22 @@
     </ClCompile>
     <ClCompile Include="sprite.c" />
     <ClCompile Include="vector.c" />
+    <ClCompile Include="widget.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="editor.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="fileIO.h" />
+    <ClInclude Include="font.h" />
     <ClInclude Include="items.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="physics.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="vector.h" />
+    <ClInclude Include="widget.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7FDED120-6E7E-4B36-A32B-C84298D67EDE}</ProjectGuid>
@@ -62,11 +70,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ReferencePath>C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(ReferencePath)</ReferencePath>
-    <LibraryPath>C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;$(LibraryPath)</LibraryPath>
+    <ReferencePath>C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;$(ReferencePath)</ReferencePath>
+    <LibraryPath>C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;$(LibraryPath)</LibraryPath>
     <OutDir>./</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,13 +93,13 @@
       <Optimization>Disabled</Optimization>
       <CompileAs>CompileAsCpp</CompileAs>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Stephen\Documents\2D libs\SDL2_image-2.0.1\include;C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

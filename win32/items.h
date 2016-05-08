@@ -3,9 +3,10 @@
 #include "entity.h"
 #include <string>
 
-int doorThink(Entity_t *self, int endPosition, int startPosition);
-int leverThink(Entity_t *self);
-void boxThink(Entity_t *self, Entity_t *player, SDL_Rect t, SDL_Rect r, SDL_Rect &Box);
-int buttonThink(Entity_t *self);
+void doorThink(Entity_S *self);
+void leverThink(Entity_S *self);
+void OpenDoor(Entity_S *self, Entity_S *other);
+void boxThink(Entity_S *self, Entity_S *player, SDL_Rect t, SDL_Rect r, SDL_Rect &Box);
+int buttonThink(Entity_S *self);
 
 #endif
