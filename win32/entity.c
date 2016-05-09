@@ -165,7 +165,7 @@ int entity_intersect_all(Entity_t *a)
 					{
 						return 0;
 					}
-
+					printf("%s \n", EntityList[i].sprite->filename);
 				return 1;
         }
     }
@@ -191,7 +191,7 @@ int entity_intersect_event_all(Entity_t *a)
         }
 		else if(entity_intersect_event(a, &EntityList[i]))
 		{
-			printf("%s \n", EntityList[i].sprite->filename);
+
 				return 1;
         }
     }
@@ -392,11 +392,11 @@ Entity_t *entity_find(Sprite *sprite)
 	{
 		if(EntityList[i].drawn == 1 && EntityList[i].sprite == sprite)
 		{
-			if(EntityList[i].health == 0)
+			if(EntityList[i].PositionRect.y != EntityList[i].PositionTemp.y)
 			{
 
 			}
-			else
+			else if(EntityList[i].PositionRect.y == EntityList[i].PositionTemp.y)
 			{
 				return &EntityList[i];
 				break;

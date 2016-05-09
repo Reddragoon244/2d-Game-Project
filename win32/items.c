@@ -28,8 +28,7 @@ void OpenDoor(Entity_S *self, Entity_S *other)
 	{
 		other->health = 0;
 	}
-	else
-		other->health = 1;
+
 }
 
 void boxThink(Entity_S *self, Entity_S *player, SDL_Rect t, SDL_Rect r, SDL_Rect &Box)

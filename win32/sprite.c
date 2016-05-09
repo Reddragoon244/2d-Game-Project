@@ -28,7 +28,7 @@ void initSpriteSystem()
 	atexit(closeSpriteSystem);
 }
 
-Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
+Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer, int ID)
 {
 	int i;
   SDL_Texture *temp = NULL;
@@ -74,6 +74,7 @@ Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer)
   SpriteList[i].imageW = sizex;/* Texture Size of the frames so a 4x3 sprite sheet this would be 4*/
   SpriteList[i].imageH = sizey;/* Texture Size of the frames so a 4x3 sprite sheet this would be 3*/
   SpriteList[i].refcount++;/* refcount is used to keep a count of the number of times this sprite is used*/
+  SpriteList[i].ID = ID;/*Simple way to find the Sprite*/
 
   SDL_QueryTexture(SpriteList[i].image, NULL, NULL, &SpriteList[i].imageW, &SpriteList[i].imageH);/*SDL Function to stage the texture*/
 

@@ -20,14 +20,14 @@ typedef struct Widget_t{
 	Sprite_T *sprite;
 	Font_t *font;
 
-	void (*draw) (struct Widget_t *self, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera);
+	void (*draw) (struct Widget_t *self, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera, float scaleW, float scaleH);
 	int (*update) (struct Widget_t *self, SDL_Rect m);
 
 }Widget;
 
 void WidgetSystemInit();
 void CloseWidgetSystem();
-Widget *loadWidget(Sprite *sprite, Font *font);
+Widget *loadWidget(Sprite *sprite, Font *font, int scale);
 void freewidget(Widget *w);
 
 #endif

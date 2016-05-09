@@ -61,6 +61,18 @@ Font *loadFont(char *filename, int size, char *TEXT, SDL_Renderer *renderer)
 	
 }
 
+void textChange(Font *f, char *TEXT, SDL_Renderer *renderer)
+{
+	SDL_Colour color = {144, 77, 255, 255};
+	SDL_Surface *textSurface = TTF_RenderText_Solid(f->font, TEXT, color);
+	f->text = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+	SDL_FreeSurface(textSurface);
+	textSurface = NULL;
+
+	SDL_QueryTexture(f->text, NULL, NULL, &f->fontSize.w, &f->fontSize.h);
+}
+
 void freeFont(Font *f)
 {
 	/*Need to clear the inuse*/

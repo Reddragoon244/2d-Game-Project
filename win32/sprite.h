@@ -15,6 +15,7 @@ typedef struct Sprite_T
 	int imageW, imageH;
 	int frameW, frameH;
 	int fpl;
+	int ID;
 
 }Sprite;
 
@@ -26,7 +27,7 @@ typedef struct Sprite_T
 void initSpriteSystem();/*clear and initial sprites*/
 void closeSpriteSystem();/*call this before you exit to make sure all the memory that your program used is given back to your OS*/
 
-Sprite *sprite_load(char *filename,int sizex, int sizey, SDL_Renderer *renderer);/*simplestway to load a file*/
+Sprite *sprite_load(char *filename, int sizex, int sizey, SDL_Renderer *renderer, int ID);/*simplestway to load a file*/
 void sprite_free(Sprite *sprite);
 void sprite_draw(Sprite *sprite, int frame, SDL_Renderer *renderer, int drawX, int drawY, int scale, SDL_Rect &Camera);
 /*

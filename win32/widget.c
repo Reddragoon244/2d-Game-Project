@@ -23,7 +23,7 @@ void CloseWidgetSystem()
    }
 }
 
-void widget_draw(Widget_t *w, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera)
+void widget_draw(Widget_t *w, int frame, SDL_Renderer *renderer, int drawX, int drawY, SDL_Rect &Camera, float scaleW, float scaleH)
 {
 	SDL_Rect src,dest;
 
@@ -33,8 +33,8 @@ void widget_draw(Widget_t *w, int frame, SDL_Renderer *renderer, int drawX, int 
     src.h = w->sprite->frameH;
     dest.x = drawX;
 	dest.y = drawY;
-    dest.w = w->sprite->frameW*4;
-    dest.h = w->sprite->frameH*4;
+    dest.w = w->sprite->frameW*scaleW;
+    dest.h = w->sprite->frameH*scaleH;
 
 	w->box.x = drawX;
 	w->box.y = drawY;
@@ -62,7 +62,7 @@ int widgetUpdate(Widget_t *w, SDL_Rect m)
 
 }
 
-Widget *loadWidget(Sprite *sprite, Font *font)
+Widget *loadWidget(Sprite *sprite, Font *font, int scale)
 {
 	int i;
 
@@ -83,13 +83,13 @@ Widget *loadWidget(Sprite *sprite, Font *font)
 
   WidgetList[i].sprite = sprite;
 
-  WidgetList[i].size.w = WidgetList[i].sprite->frameW*4;
-  WidgetList[i].size.h = WidgetList[i].sprite->frameH*4;
+  WidgetList[i].size.w = WidgetList[i].sprite->frameW*scale;
+  WidgetList[i].size.h = WidgetList[i].sprite->frameH*scale;
   WidgetList[i].size.x = 0;
   WidgetList[i].size.y = 0;
 
-  WidgetList[i].box.w = WidgetList[i].sprite->frameW*4;
-  WidgetList[i].box.h = WidgetList[i].sprite->frameH*4;
+  WidgetList[i].box.w = WidgetList[i].sprite->frameW*scale;
+  WidgetList[i].box.h = WidgetList[i].sprite->frameH*scale;
   WidgetList[i].box.x = 0;
   WidgetList[i].box.y = 0;
 

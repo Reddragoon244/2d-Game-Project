@@ -24,6 +24,7 @@ typedef struct Font_t{
 void InitFontSystem();
 void CloseFontSystem();
 
+void textChange(Font *f, char *TEXT, SDL_Renderer *renderer);
 Font *loadFont(char *filename, int size, char *TEXT, SDL_Renderer *renderer);
 void freeFont(Font *f);
 

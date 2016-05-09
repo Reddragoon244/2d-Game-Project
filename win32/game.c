@@ -42,7 +42,10 @@ int level = 33;
 int scene = 0;
 int pausegame = 0;
 
-int editorSS = 1;
+int spriteLoad = 0;
+int contentEnder = 0;
+float meterPower = 1;
+float meterNumber = 1.5;
 int helpTrue = 1;
 int editorSprite = 99;
 int i = 0;
@@ -55,6 +58,9 @@ int groundCheck = 1;
 int actionCheck = 1;
 int gameOver = 0;
 
+void Meter();
+void editorSave();
+void editorLoad();
 void editor();
 void createEntity(int i, int x, int y);
 void load();
@@ -144,10 +150,10 @@ int main(int argc, char *argv[])
 			{
 				font_draw(fontList[0], renderer, 140, 40, Camera, 1);
 
-				widgetList[0]->draw(widgetList[0], 0, renderer, 210, 240, Camera);
-				widgetList[3]->draw(widgetList[3], 0, renderer, 210, 440, Camera);
-				widgetList[2]->draw(widgetList[2], 0, renderer, 610, 240, Camera);
-				widgetList[4]->draw(widgetList[4], 0, renderer, 610, 440, Camera);
+				widgetList[0]->draw(widgetList[0], 0, renderer, 210, 240, Camera, 4, 4);
+				widgetList[3]->draw(widgetList[3], 0, renderer, 210, 440, Camera, 4, 4);
+				widgetList[2]->draw(widgetList[2], 0, renderer, 610, 240, Camera, 4, 4);
+				widgetList[4]->draw(widgetList[4], 0, renderer, 610, 440, Camera, 4, 4);
 
 				if(widgetList[0]->update(widgetList[0], mouse))
 				{
@@ -272,7 +278,7 @@ int main(int argc, char *argv[])
 					
 				}
 ///////////////////////////////////*Changing Realms*////////////////////////////////////////////
-				if(keys[SDL_SCANCODE_T] && gameOver == 0)/*Entering the Twilight Realm*/
+				if(keys[SDL_SCANCODE_T] && gameOver == 0 && meterPower == 1)/*Entering the Twilight Realm*/
 				{
 					if(transCheck == 0)
 					{
@@ -282,6 +288,7 @@ int main(int argc, char *argv[])
 					{
 						transCheck = 1;
 					}
+
 				}
 
 				if(keys[SDL_SCANCODE_Y] && gameOver == 0)/*Entering the Real World*/
@@ -294,6 +301,7 @@ int main(int argc, char *argv[])
 					{
 						transCheck = 0;
 					}
+
 				}
 
 				/*Door Thinks*/
@@ -324,11 +332,19 @@ int main(int argc, char *argv[])
 
 					editor();
 				}
+				else
+				{
+					Meter();
+					font_draw(fontList[12], renderer, 400, 20, Camera, 1);
+					widgetList[6]->draw(widgetList[6], 0, renderer, 5, 5, Camera, 1.5, 1.5);
+					widgetList[7]->draw(widgetList[7], 0, renderer, 4, 5, Camera, meterNumber, 1.5);/*UI METER*/
+				}
 				
 				if(scene == 1)
 					LevelOrder();
 
 				/*Player*/entity_draw(entitylist[0], playerframe, renderer, entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, Camera);/*Call the draw to draw the sprite to the screen*/
+
 			}
 ////////////////////////////////////*PAUSE MENU*/////////////////////////////////////////
 
@@ -336,20 +352,40 @@ int main(int argc, char *argv[])
 				{
 					pausegame = 1;
 
-					widgetList[0]->draw(widgetList[0], 0, renderer, 410, 140, Camera);
-					widgetList[1]->draw(widgetList[1], 0, renderer, 410, 340, Camera);
-					widgetList[4]->draw(widgetList[4], 0, renderer, 410, 540, Camera);
+					widgetList[5]->draw(widgetList[5], 0, renderer, 410, 150, Camera, 3, 3);
+					widgetList[2]->draw(widgetList[2], 0, renderer, 410, 300, Camera, 3, 3);
+					widgetList[1]->draw(widgetList[1], 0, renderer, 410, 450, Camera, 3, 3);
+					widgetList[4]->draw(widgetList[4], 0, renderer, 410, 600, Camera, 3, 3);
 
-					if(widgetList[0]->update(widgetList[0], mouse))
+					if(widgetList[5]->update(widgetList[5], mouse))
 					{
 						pausegame = 0;
+						mouse.x = 0;
+						mouse.y = 0;
+					}
+	
+					if(widgetList[2]->update(widgetList[2], mouse))
+					{
+						if(scene == 2)
+						{
+							editorLoad();
+						}
+						else
+							load();
+
 						mouse.x = 0;
 						mouse.y = 0;
 					}
 
 					if(widgetList[1]->update(widgetList[1], mouse))
 					{
-						save();
+						if(scene == 2)
+						{
+							editorSave();
+						}
+						else
+							save();
+
 						mouse.x = 0;
 						mouse.y = 0;
 					}
@@ -374,8 +410,9 @@ int main(int argc, char *argv[])
 					font_draw(fontList[7], renderer, 0, 280, Camera, 1);
 					font_draw(fontList[8], renderer, 0, 320, Camera, 1);
 					font_draw(fontList[9], renderer, 0, 360, Camera, 1);
-					font_draw(fontList[10], renderer, 0, 400, Camera, 1);
-					font_draw(fontList[11], renderer, 0, 440, Camera, 1);
+					font_draw(fontList[12], renderer, 0, 400, Camera, 1);
+					font_draw(fontList[10], renderer, 0, 440, Camera, 1);
+					font_draw(fontList[11], renderer, 0, 480, Camera, 1);
 					
 					if(!keys[SDL_SCANCODE_H])
 						helpTrue = 0;
@@ -383,16 +420,6 @@ int main(int argc, char *argv[])
 				else
 					helpTrue = 1;
 
-					if((spritelist[editorSprite] != NULL && entitylist[200] == NULL) || (editorSS == 0 && entitylist[200]->sprite != spritelist[editorSprite]))
-						{
-							entitylist[200] = entity_load(spritelist[editorSprite], 1, 1);
-							editorSS = 0;
-						}
-					if(entitylist[200] != NULL)
-							entity_draw(entitylist[200], 0, renderer, editorMouse.x, editorMouse.y, Camera);
-
-					//if(entity_find(spritelist[11]) != NULL)
-						//printf("%i\n", entity_find(spritelist[11])->PositionRect.x);
 			}
 				SDL_RenderPresent(renderer);
 			}
@@ -426,36 +453,39 @@ void loadEntities()
 		soundList[0] = loadSound("sounds/switch.wav");
 		soundList[1] = loadSound("sounds/jumping.wav");
 
-		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[1] = sprite_load("Hplatform1080.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[2] = sprite_load("Hplatform540.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[3] = sprite_load("Hplatform270.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[4] = sprite_load("Vplatform1080.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[5] = sprite_load("Vplatform540.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[6] = sprite_load("Vplatform270.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[7] = sprite_load("enemy1.bmp", 3, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[8] = sprite_load("enemy2.bmp", 3, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[9] = sprite_load("lever.bmp", 2, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[10] = sprite_load("box.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[11] = sprite_load("door.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[12] = sprite_load("onebrick.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[13] = sprite_load("twobrick.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[14] = sprite_load("threebrick.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[15] = sprite_load("fourbrick.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[16] = sprite_load("fivebrick.bmp", 1, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[17] = sprite_load("Hplatform450.bmp",1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[18] = sprite_load("enemy3.bmp", 8, 1, renderer);/*Function to load the sprite file into the array Sprite List*/
-		spritelist[19] = sprite_load("Hbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[20] = sprite_load("Vbrick270.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[21] = sprite_load("spikes.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[22] = sprite_load("enemy4.bmp", 8, 1, renderer);/*Platform Sprite Load*/
-		spritelist[23] = sprite_load("eyes.bmp", 3, 1, renderer);/*Platform Sprite Load*/
-		spritelist[24] = sprite_load("youwin.bmp", 1, 1, renderer);/*Platform Sprite Load*/
-		spritelist[25] = sprite_load("StartButton.bmp", 1, 1, renderer);/*Menu Button*/
-		spritelist[26] = sprite_load("SaveButton.bmp", 1, 1, renderer);/*Menu Button*/
-		spritelist[27] = sprite_load("LoadButton.bmp", 1, 1, renderer);/*Menu Button*/
-		spritelist[28] = sprite_load("EditorButton.bmp", 1, 1, renderer);/*Menu Button*/
-		spritelist[29] = sprite_load("ExitButton.bmp", 1, 1, renderer);/*Menu Button*/
+		spritelist[0] = sprite_load("image.bmp", 13, 21, renderer, 0);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[1] = sprite_load("Hplatform1080.bmp", 1, 1, renderer, 1);/*Platform Sprite Load*/
+		spritelist[2] = sprite_load("Hplatform540.bmp",1, 1, renderer, 2);/*Platform Sprite Load*/
+		spritelist[3] = sprite_load("Hplatform270.bmp",1, 1, renderer, 3);/*Platform Sprite Load*/
+		spritelist[4] = sprite_load("Vplatform1080.bmp",1, 1, renderer, 4);/*Platform Sprite Load*/
+		spritelist[5] = sprite_load("Vplatform540.bmp",1, 1, renderer, 5);/*Platform Sprite Load*/
+		spritelist[6] = sprite_load("Vplatform270.bmp",1, 1, renderer, 6);/*Platform Sprite Load*/
+		spritelist[7] = sprite_load("enemy1.bmp", 3, 1, renderer, 7);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[8] = sprite_load("enemy2.bmp", 3, 1, renderer, 8);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[9] = sprite_load("lever.bmp", 2, 1, renderer, 9);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[10] = sprite_load("box.bmp", 1, 1, renderer, 10);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[11] = sprite_load("door.bmp", 1, 1, renderer, 11);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[12] = sprite_load("onebrick.bmp", 1, 1, renderer, 12);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[13] = sprite_load("twobrick.bmp", 1, 1, renderer, 13);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[14] = sprite_load("threebrick.bmp", 1, 1, renderer, 14);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[15] = sprite_load("fourbrick.bmp", 1, 1, renderer, 15);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[16] = sprite_load("fivebrick.bmp", 1, 1, renderer, 16);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[17] = sprite_load("Hplatform450.bmp",1, 1, renderer, 17);/*Platform Sprite Load*/
+		spritelist[18] = sprite_load("enemy3.bmp", 8, 1, renderer, 18);/*Function to load the sprite file into the array Sprite List*/
+		spritelist[19] = sprite_load("Hbrick270.bmp", 1, 1, renderer, 19);/*Platform Sprite Load*/
+		spritelist[20] = sprite_load("Vbrick270.bmp", 1, 1, renderer, 20);/*Platform Sprite Load*/
+		spritelist[21] = sprite_load("spikes.bmp", 1, 1, renderer, 21);/*Platform Sprite Load*/
+		spritelist[22] = sprite_load("enemy4.bmp", 8, 1, renderer, 22);/*Platform Sprite Load*/
+		spritelist[23] = sprite_load("eyes.bmp", 3, 1, renderer, 23);/*Platform Sprite Load*/
+		spritelist[24] = sprite_load("youwin.bmp", 1, 1, renderer, 24);/*Platform Sprite Load*/
+		spritelist[25] = sprite_load("StartButton.bmp", 1, 1, renderer, 25);/*Menu Button*/
+		spritelist[26] = sprite_load("SaveButton.bmp", 1, 1, renderer, 26);/*Menu Button*/
+		spritelist[27] = sprite_load("LoadButton.bmp", 1, 1, renderer, 27);/*Menu Button*/
+		spritelist[28] = sprite_load("EditorButton.bmp", 1, 1, renderer, 28);/*Menu Button*/
+		spritelist[29] = sprite_load("ExitButton.bmp", 1, 1, renderer, 29);/*Menu Button*/
+		spritelist[30] = sprite_load("ResumeButton.bmp", 1, 1, renderer, 30);/*Menu Button*/
+		spritelist[31] = sprite_load("meterborder.bmp", 1, 1, renderer, 31);/*Meter Border*/
+		spritelist[32] = sprite_load("meter.bmp", 1, 1, renderer, 32);/*Meter*/
 
 		fontList[0] = loadFont("fonts/Coalition.ttf", 60, "Into the Twilight", renderer);
 		fontList[1] = loadFont("fonts/font.ttf", 40, "Welcome to the Into The Twilight Level Editor.", renderer);
@@ -467,14 +497,19 @@ void loadEntities()
 		fontList[7] = loadFont("fonts/font.ttf", 40, " 6 - Horizantal platform 270 pixels.", renderer);
 		fontList[8] = loadFont("fonts/font.ttf", 40, " 7 - Lever.", renderer);
 		fontList[9] = loadFont("fonts/font.ttf", 40, " 8 - Door.", renderer);
+		fontList[12] = loadFont("fonts/font.ttf", 40, " Place the Door First before Lever", renderer);
 		fontList[10] = loadFont("fonts/font.ttf", 30, " Press Left Click after the Number to Place the Item.", renderer);
 		fontList[11] = loadFont("fonts/font.ttf", 40, " Help", renderer);
+		fontList[12] = loadFont("fonts/Coalition.ttf", 30, "Editor", renderer);
 
-		widgetList[0] = loadWidget(spritelist[25], fontList[0]);/*Widget Start Button*/
-		widgetList[1] = loadWidget(spritelist[26], fontList[0]);/*Widget Save Button*/
-		widgetList[2] = loadWidget(spritelist[27], fontList[0]);/*Widget Load Button*/
-		widgetList[3] = loadWidget(spritelist[28], fontList[0]);/*Widget Editor Button*/
-		widgetList[4] = loadWidget(spritelist[29], fontList[0]);/*Widget Exit Button*/
+		widgetList[0] = loadWidget(spritelist[25], fontList[0], 4);/*Widget Start Button*/
+		widgetList[1] = loadWidget(spritelist[26], fontList[0], 4);/*Widget Save Button*/
+		widgetList[2] = loadWidget(spritelist[27], fontList[0], 4);/*Widget Load Button*/
+		widgetList[3] = loadWidget(spritelist[28], fontList[0], 4);/*Widget Editor Button*/
+		widgetList[4] = loadWidget(spritelist[29], fontList[0], 4);/*Widget Exit Button*/
+		widgetList[5] = loadWidget(spritelist[30], fontList[0], 4);/*Widget Resume Button*/
+		widgetList[6] = loadWidget(spritelist[31], fontList[0], 1);/*Widget Meter Border*/
+		widgetList[7] = loadWidget(spritelist[32], fontList[0], 1);/*Widget Meter*/
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Player*/
 		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Hplatform1080*/
@@ -554,6 +589,31 @@ void loadEntities()
 
 }
 
+void Meter()
+{
+	if(transCheck == 1)
+	{
+		if(meterNumber <= 0)
+		{
+			transCheck = 0;
+			meterPower = 0;
+			meterNumber = 0;
+		}
+		else
+			meterNumber -= 0.00006;
+	}
+	else
+	{
+		if(meterNumber >= 1.5)
+		{
+			meterPower = 1;
+			meterNumber = 1.5;
+		}
+		else
+			meterNumber += 0.00006;
+	}
+}
+
 void InitPos()
 {
 	transCheck = 0;
@@ -567,6 +627,7 @@ void InitPos()
 	actionCheck = 1;
 	Camera.x = 0;
 	gameOver = 0;
+	meterNumber = 1.5;
 
 	/*Player Init*/
 	entitylist[0]->PositionRect.x = 150;
@@ -939,6 +1000,8 @@ void createEntity(int i, int x, int y)
 				entitylist[a] = entity_load(spritelist[i], 1, 1);
 				entitylist[a]->PositionRect.x = x;
 				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->PositionTemp.x = x;
+				entitylist[a]->PositionTemp.y = y;
 				entitylist[a]->frame = 0;
 
 				if(entitylist[i]->sprite == spritelist[11])
@@ -965,6 +1028,8 @@ void createEntity(int i, int x, int y)
 				entitylist[a] = entity_load(spritelist[i], 1, 1);
 				entitylist[a]->PositionRect.x = x;
 				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->PositionTemp.x = x;
+				entitylist[a]->PositionTemp.y = y;
 				entitylist[a]->frame = 0;
 
 				if(entitylist[i]->sprite == spritelist[11])
@@ -991,6 +1056,8 @@ void createEntity(int i, int x, int y)
 				entitylist[a] = entity_load(spritelist[i], 1, 1);
 				entitylist[a]->PositionRect.x = x;
 				entitylist[a]->PositionRect.y = y;
+				entitylist[a]->PositionTemp.x = x;
+				entitylist[a]->PositionTemp.y = y;
 				entitylist[a]->frame = 0;
 
 				if(entitylist[i]->sprite == spritelist[11])
@@ -1133,6 +1200,7 @@ void LevelOrder()
 		/*LEVEL 1*/
 	if(level == 1)
 	{
+		textChange(fontList[12], "World 1", renderer);
 		monsterInfo(entitylist[32]);
 		monsterInfo2(405, 650, 0);
 		monsterInfo3(0);
@@ -1145,6 +1213,7 @@ void LevelOrder()
 	else
 	{
 		/*Level 2*/
+		textChange(fontList[12], "World 2", renderer);
 		monsterInfo(entitylist[32]);
 		monsterInfo2(2506, 2784, 0);
 		monsterInfo3(0);
@@ -1579,6 +1648,186 @@ void boss()
 
 }
 
+void editorSave()
+{
+	int a;
+
+	/*Real World Entity Save*/
+		for(a = 68; a<=76; a++)
+		{
+			if(entitylist[a] != NULL)
+			{
+				saveContents(a, "levels/level1.txt");
+				saveContents(entitylist[a]->sprite->ID, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.y, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.y, "levels/level1.txt");
+				saveContents(entitylist[a]->frame, "levels/level1.txt");
+				
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					saveContents(entitylist[a]->dontColl, "levels/level1.txt");
+				}
+
+			}
+			else
+			{
+				saveContents(888888, "levels/level1.txt");
+				break;
+			}
+		}
+
+	/*Twilight World Entity Save*/
+		for(a = 77; a<=85; a++)
+		{
+			if(entitylist[a] != NULL)
+			{
+				saveContents(a, "levels/level1.txt");
+				saveContents(entitylist[a]->sprite->ID, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.y, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.y, "levels/level1.txt");
+				saveContents(entitylist[a]->frame, "levels/level1.txt");
+
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					saveContents(entitylist[a]->dontColl, "levels/level1.txt");
+				}
+			}
+			else
+			{
+				saveContents(888888, "levels/level1.txt");
+				break;
+			}
+		}
+
+	/*Both World Entity Save*/
+		for(a = 86; a<=94; a++)
+		{
+			if(entitylist[a] != NULL)
+			{
+				saveContents(a, "levels/level1.txt");
+				saveContents(entitylist[a]->sprite->ID, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionRect.y, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.x, "levels/level1.txt");
+				saveContents(entitylist[a]->PositionTemp.y, "levels/level1.txt");
+				saveContents(entitylist[a]->frame, "levels/level1.txt");
+				
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					saveContents(entitylist[a]->dontColl, "levels/level1.txt");
+				}
+			}
+			else
+			{
+				saveContents(888888, "levels/level1.txt");
+				break;
+			}
+		}
+
+		saveContents(999999, "levels/level1.txt");
+}
+void editorLoad()
+{
+	int a;
+
+		for(a = 68; a<=76; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				if(loadContents("levels/level1.txt") != a)
+					break;
+
+				spriteLoad = loadContents("levels/level1.txt");
+				entitylist[a] = entity_load(spritelist[spriteLoad], 1, 1);
+				entitylist[a]->PositionRect.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionRect.y = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.y = loadContents("levels/level1.txt");
+				entitylist[a]->frame = loadContents("levels/level1.txt");
+
+				if(entitylist[a]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+				
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = loadContents("levels/level1.txt");
+				}
+
+			}
+
+		}
+
+		for(a = 77; a<=85; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				if(loadContents("levels/level1.txt") != a)
+					break;
+
+				spriteLoad = loadContents("levels/level1.txt");
+				entitylist[a] = entity_load(spritelist[spriteLoad], 1, 1);
+				entitylist[a]->PositionRect.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionRect.y = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.y = loadContents("levels/level1.txt");
+				entitylist[a]->frame = loadContents("levels/level1.txt");
+
+				if(entitylist[a]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+				
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = loadContents("levels/level1.txt");
+				}
+
+			}
+		}
+
+		for(a = 86; a<=94; a++)
+		{
+			if(entitylist[a] == NULL)
+			{
+				if(loadContents("levels/level1.txt") != a)
+					break;
+
+				spriteLoad = loadContents("levels/level1.txt");
+				entitylist[a] = entity_load(spritelist[spriteLoad], 1, 1);
+				entitylist[a]->PositionRect.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionRect.y = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.x = loadContents("levels/level1.txt");
+				entitylist[a]->PositionTemp.y = loadContents("levels/level1.txt");
+				entitylist[a]->frame = loadContents("levels/level1.txt");
+
+				if(entitylist[a]->sprite == spritelist[11])
+				{
+					entitylist[a]->update = doorThink;
+				}
+				
+				if(entitylist[a]->sprite == spritelist[9])
+				{
+					entitylist[a]->update = leverThink;
+					entitylist[a]->touch = OpenDoor;
+					entitylist[a]->dontColl = loadContents("levels/level1.txt");
+				}
+
+			}
+		}
+
+	contentEnder = loadContents("levels/level1.txt");
+
+}
 void save()
 {
 	saveContents(LeverFrame[0] ,"savegames/save1.txt");
@@ -1642,5 +1891,6 @@ void load()
 	entitylist[0]->PositionRect.y = loadContents("savegames/save1.txt");
 	entitylist[0]->PositionTemp.x = loadContents("savegames/save1.txt");
 	entitylist[0]->PositionTemp.x = loadContents("savegames/save1.txt");
+	contentEnder = loadContents("savegames/save1.txt");
 	
 }
