@@ -55,6 +55,7 @@ int groundCheck = 1;
 int actionCheck = 1;
 int gameOver = 0;
 
+void PlayerInit();
 void Meter();
 void editorSave();
 void editorLoad();
@@ -158,6 +159,7 @@ int main(int argc, char *argv[])
 					level = 0;
 					editor();
 					editorLoad();
+					PlayerInit();
 					mouse.x = 0;
 					mouse.y = 0;
 				}
@@ -617,6 +619,16 @@ void Meter()
 	}
 }
 
+void PlayerInit()
+{
+	/*Player Init*/
+	entitylist[0]->PositionRect.x = 150;
+	entitylist[0]->PositionRect.y = 76;
+	entitylist[0]->PositionTemp.x = 150;
+	entitylist[0]->PositionTemp.y = 76;
+	Camera.x = 0;
+}
+
 void InitPos()
 {
 	transCheck = 0;
@@ -988,7 +1000,6 @@ void ChangeWorlds()
 		if(level == 0)
 		{
 			level = 1;
-			InitPos();
 			entity_drawn_free();
 		}
 		else if(level == 1)
@@ -1850,6 +1861,7 @@ void editorLoad()
 }
 void save()
 {
+	saveContents(level,"savegames/save1.txt");
 	saveContents(LeverFrame[0] ,"savegames/save1.txt");
 	saveContents(LeverFrame[1] ,"savegames/save1.txt");
 	saveContents(LeverFrame[2] ,"savegames/save1.txt");
@@ -1883,6 +1895,7 @@ void save()
 
 void load()
 {
+	level = loadContents("savegames/save1.txt");
 	LeverFrame[0] = loadContents("savegames/save1.txt");
 	LeverFrame[1] = loadContents("savegames/save1.txt");
 	LeverFrame[2] = loadContents("savegames/save1.txt");
