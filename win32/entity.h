@@ -5,7 +5,6 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <string>
-#include <math.h>
 #include <stdlib.h>
 #include "sprite.h"
 #include "vector.h"

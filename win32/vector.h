@@ -6,7 +6,7 @@
 #include "SDL_ttf.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 
 /**
   *@brief a simple vector structure

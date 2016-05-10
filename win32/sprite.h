@@ -6,7 +6,6 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 
 static const int spriteMax = 1000;

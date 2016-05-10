@@ -1,7 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include <math.h>
 #include "vector.h"
 
 /*Function to compare two vectors */
@@ -41,8 +40,8 @@ Vector2d Normalize(Vector2d v)
 
 	length.x = v.x*v.x;
 	length.y = v.y*v.y;
-	length.x = sqrt (length.x);
-	length.y = sqrt (length.y);
+	//length.x = sqrt (length.x);
+	//length.y = sqrt (length.y);
 
 	if(length.x)
 	{

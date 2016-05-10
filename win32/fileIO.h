@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include "sprite.h"
 
 void saveContents(int i, char *filename);

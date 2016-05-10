@@ -78,14 +78,14 @@
     <OutDir>./</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Libraries\SDL2_ttf-2.0.12\include;C:\Libraries\SDL2_mixer-2.0.0\include;C:\Libraries\SDL2_image-2.0.0\include;C:\Libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Reddragoon\Documents\2D libs\SDL2_image-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;C:\Libraries\SDL2_ttf-2.0.12\include;C:\Libraries\SDL2_mixer-2.0.0\include;C:\Libraries\SDL2_image-2.0.0\include;C:\Libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ReferencePath>C:\Libraries\SDL2_ttf-2.0.12\lib\x86;C:\Libraries\SDL2_mixer-2.0.0\lib\x86;C:\Libraries\SDL2_image-2.0.0\lib\x86;C:\Libraries\SDL2-2.0.3\lib\x86;$(ReferencePath)</ReferencePath>
+    <ReferencePath>C:\Users\Reddragoon\Documents\2D libs\SDL2_image-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Libraries\SDL2_ttf-2.0.12\lib\x86;C:\Libraries\SDL2_mixer-2.0.0\lib\x86;C:\Libraries\SDL2_image-2.0.0\lib\x86;C:\Libraries\SDL2-2.0.3\lib\x86;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\Libraries\SDL2_ttf-2.0.12\lib\x86;C:\Libraries\SDL2_mixer-2.0.0\lib\x86;C:\Libraries\SDL2_image-2.0.0\lib\x86;C:\Libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
-    <OutDir>..</OutDir>
+    <LibraryPath>C:\Users\Reddragoon\Documents\2D libs\SDL2_image-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;C:\Libraries\SDL2_ttf-2.0.12\lib\x86;C:\Libraries\SDL2_mixer-2.0.0\lib\x86;C:\Libraries\SDL2_image-2.0.0\lib\x86;C:\Libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <OutDir>./</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,7 +106,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include;C:\Users\Reddragoon\Documents\2D libs\SDL2_image-2.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -116,6 +116,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Reddragoon\Documents\2D libs\SDL2_image-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86;C:\Users\Reddragoon\Documents\2D libs\SDL2-2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
