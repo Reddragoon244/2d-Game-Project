@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <string>
 #include "level.h"
-#include "Camera.h"
 
 Level *levelList = NULL;
 Level level;

@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
 #include "font.h"
 #include "sound.h"
 #include "sprite.h"
@@ -158,7 +155,9 @@ int main(int argc, char *argv[])
 				if(widgetList[0]->update(widgetList[0], mouse))
 				{
 					scene = 1;
-					level = 1;
+					level = 0;
+					editor();
+					editorLoad();
 					mouse.x = 0;
 					mouse.y = 0;
 				}
@@ -332,16 +331,15 @@ int main(int argc, char *argv[])
 
 					editor();
 				}
-				else
+				
+				if(scene == 1)
 				{
+					LevelOrder();
 					Meter();
-					font_draw(fontList[12], renderer, 400, 20, Camera, 1);
+					font_draw(fontList[13], renderer, 400, 20, Camera, 1);
 					widgetList[6]->draw(widgetList[6], 0, renderer, 5, 5, Camera, 1.5, 1.5);
 					widgetList[7]->draw(widgetList[7], 0, renderer, 4, 5, Camera, meterNumber, 1.5);/*UI METER*/
 				}
-				
-				if(scene == 1)
-					LevelOrder();
 
 				/*Player*/entity_draw(entitylist[0], playerframe, renderer, entitylist[0]->PositionRect.x, entitylist[0]->PositionRect.y, Camera);/*Call the draw to draw the sprite to the screen*/
 
@@ -355,7 +353,7 @@ int main(int argc, char *argv[])
 					widgetList[5]->draw(widgetList[5], 0, renderer, 410, 150, Camera, 3, 3);
 					widgetList[2]->draw(widgetList[2], 0, renderer, 410, 300, Camera, 3, 3);
 					widgetList[1]->draw(widgetList[1], 0, renderer, 410, 450, Camera, 3, 3);
-					widgetList[4]->draw(widgetList[4], 0, renderer, 410, 600, Camera, 3, 3);
+					widgetList[8]->draw(widgetList[8], 0, renderer, 410, 600, Camera, 3, 3);
 
 					if(widgetList[5]->update(widgetList[5], mouse))
 					{
@@ -373,6 +371,7 @@ int main(int argc, char *argv[])
 						else
 							load();
 
+						pausegame = 0;
 						mouse.x = 0;
 						mouse.y = 0;
 					}
@@ -386,15 +385,18 @@ int main(int argc, char *argv[])
 						else
 							save();
 
+						pausegame = 0;
 						mouse.x = 0;
 						mouse.y = 0;
 					}
 
-					if(widgetList[4]->update(widgetList[4], mouse))
+					if(widgetList[8]->update(widgetList[8], mouse))
 					{
+						pausegame = 0;
 						mouse.x = 0;
 						mouse.y = 0;
-						isRunning = false;
+						scene = 0;
+						SDL_RenderClear(renderer);
 					}
 					
 				}
@@ -423,7 +425,6 @@ int main(int argc, char *argv[])
 			}
 				SDL_RenderPresent(renderer);
 			}
-		
 	
 	SDL_DestroyWindow(window);
 	SDL_DestroyTexture(texture);
@@ -486,6 +487,7 @@ void loadEntities()
 		spritelist[30] = sprite_load("ResumeButton.bmp", 1, 1, renderer, 30);/*Menu Button*/
 		spritelist[31] = sprite_load("meterborder.bmp", 1, 1, renderer, 31);/*Meter Border*/
 		spritelist[32] = sprite_load("meter.bmp", 1, 1, renderer, 32);/*Meter*/
+		spritelist[33] = sprite_load("MainMenu.bmp", 1, 1, renderer, 32);/*Main Menu Button*/
 
 		fontList[0] = loadFont("fonts/Coalition.ttf", 60, "Into the Twilight", renderer);
 		fontList[1] = loadFont("fonts/font.ttf", 40, "Welcome to the Into The Twilight Level Editor.", renderer);
@@ -500,7 +502,7 @@ void loadEntities()
 		fontList[12] = loadFont("fonts/font.ttf", 40, " Place the Door First before Lever", renderer);
 		fontList[10] = loadFont("fonts/font.ttf", 30, " Press Left Click after the Number to Place the Item.", renderer);
 		fontList[11] = loadFont("fonts/font.ttf", 40, " Help", renderer);
-		fontList[12] = loadFont("fonts/Coalition.ttf", 30, "Editor", renderer);
+		fontList[13] = loadFont("fonts/Coalition.ttf", 30, "Editor", renderer);
 
 		widgetList[0] = loadWidget(spritelist[25], fontList[0], 4);/*Widget Start Button*/
 		widgetList[1] = loadWidget(spritelist[26], fontList[0], 4);/*Widget Save Button*/
@@ -510,6 +512,7 @@ void loadEntities()
 		widgetList[5] = loadWidget(spritelist[30], fontList[0], 4);/*Widget Resume Button*/
 		widgetList[6] = loadWidget(spritelist[31], fontList[0], 1);/*Widget Meter Border*/
 		widgetList[7] = loadWidget(spritelist[32], fontList[0], 1);/*Widget Meter*/
+		widgetList[8] = loadWidget(spritelist[33], fontList[0], 4);/*Widget Main Menu Button*/
 
 		entitylist[0] = entity_load(spritelist[0], 1, 1);/*Player*/
 		entitylist[1] = entity_load(spritelist[1], 1, 1);/*Hplatform1080*/
@@ -600,7 +603,7 @@ void Meter()
 			meterNumber = 0;
 		}
 		else
-			meterNumber -= 0.00006;
+			meterNumber -= 0.00009;
 	}
 	else
 	{
@@ -610,7 +613,7 @@ void Meter()
 			meterNumber = 1.5;
 		}
 		else
-			meterNumber += 0.00006;
+			meterNumber += 0.00009;
 	}
 }
 
@@ -981,9 +984,19 @@ void ChangeWorlds()
 {
 	if(entitylist[0]->PositionRect.x > 3240)
 	{
-		level = 2;
-		InitPos();
-		entity_drawn_free();
+
+		if(level == 0)
+		{
+			level = 1;
+			InitPos();
+			entity_drawn_free();
+		}
+		else if(level == 1)
+		{
+			level = 2;
+			InitPos();
+			entity_drawn_free();
+		}
 	}
 }
 
@@ -1198,9 +1211,15 @@ void editor()
 void LevelOrder()
 {
 		/*LEVEL 1*/
-	if(level == 1)
+	if(level == 0)
 	{
-		textChange(fontList[12], "World 1", renderer);
+		textChange(fontList[13], "World 1", renderer);
+
+		editor();
+	}
+	else if(level == 1)
+	{
+		textChange(fontList[13], "World 2", renderer);
 		monsterInfo(entitylist[32]);
 		monsterInfo2(405, 650, 0);
 		monsterInfo3(0);
@@ -1213,7 +1232,7 @@ void LevelOrder()
 	else
 	{
 		/*Level 2*/
-		textChange(fontList[12], "World 2", renderer);
+		textChange(fontList[13], "World 3", renderer);
 		monsterInfo(entitylist[32]);
 		monsterInfo2(2506, 2784, 0);
 		monsterInfo3(0);
@@ -1588,6 +1607,7 @@ void leverAction()
 
 					if(entity_return_intersect_all(entitylist[0])->sprite == spritelist[9] && entity_return_intersect_all(entitylist[0])->update != NULL && entity_return_intersect_all(entitylist[0])->health == 1)
 					{
+						Mix_PlayChannel(-1, soundList[0]->seffect, 0);
 						entity_return_intersect_all(entitylist[0])->health = 0;
 						entity_return_intersect_all(entitylist[0])->update(entity_return_intersect_all(entitylist[0]));
 						entity_return_intersect_all(entitylist[0])->touch(entity_return_intersect_all(entitylist[0]), entity_find(spritelist[11]));

@@ -2,8 +2,8 @@
 #define __SOUND_H__
 
 #include <SDL.h>
-#include <cstdlib>
-#include <cstdio>
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <SDL_mixer.h>
 

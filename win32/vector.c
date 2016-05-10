@@ -1,9 +1,8 @@
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <math.h>
 #include "vector.h"
-#include <cstdio>
 
 /*Function to compare two vectors */
 int VectorCompare(Vector2d v1, Vector2d v2)

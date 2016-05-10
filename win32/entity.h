@@ -1,9 +1,12 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <string>
+#include <math.h>
+#include <stdlib.h>
 #include "sprite.h"
 #include "vector.h"
 

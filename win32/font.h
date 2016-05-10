@@ -4,8 +4,8 @@
 #include <SDL_ttf.h>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <cstdlib>
-#include <cstdio>
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 const int MAX_FONT = 255;

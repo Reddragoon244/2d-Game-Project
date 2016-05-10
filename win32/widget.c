@@ -107,7 +107,7 @@ void freewidget(Widget *w)
   w->inuse--;
   if(w->inuse == 0)
   {
-		strcpy(w->sprite->filename,"\0");
+		strcpy(w->sprite->filename,  "\0");
 		
 		if(w->sprite->image != NULL)SDL_DestroyTexture(w->sprite->image);
 			w->sprite->image = NULL;

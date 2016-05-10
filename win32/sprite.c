@@ -1,8 +1,3 @@
-#include <string>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-
 #include "sprite.h"
 
 

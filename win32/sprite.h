@@ -1,9 +1,13 @@
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 static const int spriteMax = 1000;
 

@@ -3,6 +3,9 @@
 
 #include<SDL.h>
 #include<SDL_image.h>
+#include <stdlib.h>
+#include <string>
+#include "Camera.h"
 #include "entity.h"
 #include "vector.h"
 

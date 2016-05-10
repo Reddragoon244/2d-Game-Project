@@ -1,7 +1,7 @@
 #ifndef __ITEMS_H__
 #define __ITEMS_H__
 #include "entity.h"
-#include <string>
+#include <string.h>
 
 void doorThink(Entity_S *self);
 void leverThink(Entity_S *self);

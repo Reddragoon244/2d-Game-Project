@@ -1,17 +1,48 @@
-﻿Build started 5/9/2016 2:30:10 AM.
-     1>Project "C:\Users\Stephen\Dropbox\2d-Game-Project\win32\gametest.vcxproj" on node 2 (build target(s)).
+﻿Build started 5/9/2016 8:57:01 PM.
+     1>Project "C:\Users\Reddragoon\Dropbox\2d-Game-Project\win32\gametest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\gametest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_image-2.0.1\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include" /I"C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include" /I"C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt game.c
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\Stephen\Documents\2D libs\SDL2-2.0.4\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_image-2.0.1\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\include" /I"C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\include" /I"C:\Users\Reddragoon\Documents\2D libs\SDL2_ttf-2.0.14\include" /I"C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt entity.c game.c items.c level.c physics.c
+         entity.c
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(41): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(42): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(73): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(136): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(136): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(268): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(268): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(272): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(272): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(293): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(293): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(297): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(297): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(318): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(318): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(322): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(322): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(339): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\entity.c(340): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+         Generating Code...
+         Compiling...
+         physics.c
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\physics.c(15): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\physics.c(31): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\physics.c(47): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\physics.c(65): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+         level.c
+         items.c
          game.c
-     1>c:\users\stephen\dropbox\2d-game-project\win32\game.c(233): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\dropbox\2d-game-project\win32\game.c(241): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\stephen\dropbox\2d-game-project\win32\game.c(603): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\stephen\dropbox\2d-game-project\win32\game.c(613): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\stephen\dropbox\2d-game-project\win32\game.c(1245): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\game.c(232): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\game.c(240): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\game.c(606): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\game.c(616): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\reddragoon\dropbox\2d-game-project\win32\game.c(1264): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+         Generating Code...
        Link:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO /LIBPATH:"C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86" /LIBPATH:"C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86" /LIBPATH:"C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib SDL2_mixer.lib SDL2_ttf.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Stephen\Dropbox\2d-Game-Project\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\Animation.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"./gametest.exe" /NOLOGO /LIBPATH:"C:\Users\Stephen\Documents\2D libs\SDL2_ttf-2.0.14\lib\x86" /LIBPATH:"C:\Users\Stephen\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86" /LIBPATH:"C:\Users\Reddragoon\Documents\2D libs\SDL2_mixer-2.0.1\lib\x86" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL2.lib SDL2main.lib SDL2_image.lib SDL2_mixer.lib SDL2_ttf.lib /MANIFEST /ManifestFile:"Debug\gametest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Reddragoon\Dropbox\2d-Game-Project\win32\gametest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"./gametest.lib" /MACHINE:X86 Debug\Animation.obj
          Debug\camera.obj
          Debug\editor.obj
          Debug\entity.obj
@@ -26,14 +57,14 @@
          Debug\vector.obj
          Debug\widget.obj
          LINK : ./gametest.exe not found or not built by the last incremental link; performing full link
-         gametest.vcxproj -> C:\Users\Stephen\Dropbox\2d-Game-Project\win32\./gametest.exe
+         gametest.vcxproj -> C:\Users\Reddragoon\Dropbox\2d-Game-Project\win32\./gametest.exe
        Manifest:
-         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"./gametest.exe;#1" /manifest Debug\gametest.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"./gametest.exe;#1" /manifest Debug\gametest.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\gametest.unsuccessfulbuild".
          Touching "Debug\gametest.lastbuildstate".
-     1>Done Building Project "C:\Users\Stephen\Dropbox\2d-Game-Project\win32\gametest.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Reddragoon\Dropbox\2d-Game-Project\win32\gametest.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.09
+Time Elapsed 00:00:03.14

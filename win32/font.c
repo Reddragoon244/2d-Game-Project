@@ -45,7 +45,7 @@ Font *loadFont(char *filename, int size, char *TEXT, SDL_Renderer *renderer)
 	FontList[i].inuse++;
 
 	FontList[i].font =  TTF_OpenFont(filename, size);/*Font Load from File*/
-
+	
 	SDL_Colour color = {144, 77, 255, 255};
 	SDL_Surface *textSurface = TTF_RenderText_Solid(FontList[i].font, TEXT, color);
 	FontList[i].text = SDL_CreateTextureFromSurface(renderer, textSurface);

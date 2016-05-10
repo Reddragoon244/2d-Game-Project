@@ -3,9 +3,8 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <cstdlib>
-#include <cstdio>
-#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "sprite.h"
 #include "font.h"
 #include "vector.h"
